@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<h1>Session Show</h1>
+
+<p>{{ object.temporal_user }}</p>
+<p>{{ object.is_active }}</p>
+<p>{{ object.login_time }}</p>
+<p>{{ object.logout_time }}</p>
+<p>{{ object.createAt }}</p>
+
+{% endblock %}
