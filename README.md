@@ -23,3 +23,16 @@
 
 ###How to use the APIs
   - Scan the QR code and parse the qr code string out of it
+
+##Session
+###Create Session
+This api is to create a session for a user
+- Method: POST
+- Url: `http://127.0.0.1/api/session-create/`
+- Parameters required:
+  * `qr_code_string`(string)
+- Parameters optional: None
+- Query String: None
+- Permissions: a Staff or admin has to be authenticated
+- Instructions: Copy paste following commnad in your terminal to create a session
+- Command: `curl -H "Authorization: JWT <token>" http://127.0.0.1/api/session-create/`
