@@ -1,0 +1,11 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+ul.messages {
+    list-style-type: none;
+    text-align: center;
+    z-index: 100;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    margin-top: 3%;
+}

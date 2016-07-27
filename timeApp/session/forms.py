@@ -12,10 +12,10 @@ class TemporalUserCreateForm(ModelForm):
         model = TemporalUser
         fields = ['first_name', 'last_name', 'email']
 
-    def __init__(self, *args, **kwargs):
-        super(TemporalUserCreateForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'temp-user-create'
-        self.helper.form_method = 'post'
-        self.helper.form_action = reverse('session-temporalusercreate')
-        self.helper.add_input(Submit('submit', 'Create'))
+    # def __init__(self, *args, **kwargs):
+    #     super(TemporalUserCreateForm, self).__init__(*args, **kwargs)
+    #     self.helper = FormHelper()
+    #     self.helper.form_id = 'temp-user-create'
+    #     self.helper.form_method = 'post'
+    #     self.helper.form_action = reverse('session-temporalusercreate')
+    #     self.helper.add_input(Submit('submit', 'Create'))

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block css_js %}
+<link href="{% static "css/index/index.css" %}" rel="stylesheet" type="text/css">
+<script type="text/javascript "src="{% static "javascript/index/index.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+<ul class="messages alert alert-success">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="container contentContainer" id="topContainer">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="center" id="signin">
+                <h3>Sign in</h3>
+                <form method="post" action="{% url 'index-login' %}">{% csrf_token %}
+                    <div class="col-md-4 col-md-offset-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                            {{ form.email }}
+                        </div>
+                        {{ form.email.errors }}
+                        </br>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                            {{ form.password }}
+                        </div>
+                        {{ form.password.errors }}
+                        </br>
+                        <button type="submit" class="btn new-btn">Sign in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

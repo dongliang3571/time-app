@@ -1,5 +1,7 @@
 import random
+import pytz
 
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
@@ -7,15 +9,46 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 
+class Team(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.name
+
+
+class TemporalUserQuerySet(models.QuerySet):
+    def get_total_member_for_organization(self, organization):
+        return self.filter(organization=organization, is_visitor=False)
+
+    def get_total_visitor_for_organization(self, organization):
+        return self.filter(organization=organization, is_visitor=True)
+
+
+class TemporalUserManager(models.Manager):
+    def get_queryset(self):
+        return TemporalUserQuerySet(self.model, using=self._db)
+
+    def get_total_member_for_organization(self, organization):
+        return self.get_queryset().get_total_member_for_organization(organization)
+
+    def get_total_visitor_for_organization(self, organization):
+        return self.get_queryset().get_total_visitor_for_organization(organization)
+
+
 class TemporalUser(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.EmailField(verbose_name='email address', max_length=255,
                               unique=True)
+    organization = models.ForeignKey(User, null=True, blank=True)
+    team = models.ForeignKey(Team, null=True, blank=True)
     qr_code_string = models.CharField(max_length=300, null=True, blank=True)
     pin_number = models.CharField(max_length=4, null=True, blank=True)
+    is_visitor = models.BooleanField(default=False)
     createAt = models.DateTimeField(verbose_name='date joined',
                                     default=timezone.now)
+
+    objects = TemporalUserManager()
 
     def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)
@@ -82,6 +115,18 @@ class UserSession(models.Model):
         """
         total_seconds = (timezone.now() - self.login_time).total_seconds()
         return total_seconds
+
+    def proper_login_time_string(self):
+        eastern = pytz.timezone('US/Eastern')
+        eas_dt = self.login_time.astimezone(eastern)
+        format = '%Y-%m-%d %H:%M:%S'
+        return eas_dt.strftime(format)
+
+    def proper_logout_time_string(self):
+        eastern = pytz.timezone('US/Eastern')
+        eas_dt = self.login_time.astimezone(eastern)
+        format = '%Y-%m-%d %H:%M:%S'
+        return eas_dt.strftime(format)
 
 
 def new_user_session_receiver(sender, instance, created, *args, **kwargs):

@@ -110,6 +110,8 @@ STATICFILES_DIRS = (
 
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/'
+
 SITE_ID = 1
 
 # rest_framework settings

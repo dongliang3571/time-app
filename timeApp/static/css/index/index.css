@@ -1,0 +1,36 @@
+html, body {
+    font-family: 'Avenir','Helvetica Neue',Arial,sans-serif;
+    height: 100%;
+}
+
+.navbar-custom {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    height:90px;
+}
+
+#topContainer {
+    background:url("/static/images/background_dashboard_index.jpg") center center / auto 100%;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+}
+
+#signin {
+    border-top: 2px solid #1CB796;
+    background-color: rgba(255, 255, 255, 0.6);
+    height:220px;
+    width:auto;
+}
+
+.center {
+    text-align:center;
+}
+
+.new-btn{
+    background-color:#23B099;
+    color:white;
+    border-radius: 0px;
+    box-shadow: 0px;
+}
