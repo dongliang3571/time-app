@@ -69,35 +69,34 @@
 
         </br>
         </br>
-      </br>
-
+        </br>
           <table class="table table-striped">
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Company name</th>
-                <th>Status</th>
                 <th>Signed in at</th>
                 <th>Signed out at</th>
                 <th>Total number of hours</th>
               </tr>
             </thead>
+
             <tbody>
                 {% for session in team_session %}
                 <tr>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ session.date }}</td>
+                    <td>{{ session.name }}</td>
+                    <td>{{ session.team }}</td>
+                    <td>{{ session.sign_in }}</td>
+                    <td>{{ session.sign_out }}</td>
+                    <td>{{ session.total_hours }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
           </table>
         </div>
+        <div>{{ error }}</div>
     </div>
 </div>
 

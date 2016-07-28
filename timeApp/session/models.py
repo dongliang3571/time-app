@@ -107,8 +107,8 @@ class UserSessionQuerySet(models.QuerySet):
             temporal_user__organization=organization,
             temporal_user__is_visitor=False)
 
-    def get_sessions_for_team(self, team):
-        return self.filter(temporal_user__team=team)
+    def get_inactive_sessions_for_team(self, team):
+        return self.filter(temporal_user__team=team, is_active=False)
 
 
 class UserSession(models.Model):
@@ -145,17 +145,45 @@ class UserSession(models.Model):
         total_seconds = (timezone.now() - self.login_time).total_seconds()
         return total_seconds
 
+    def total_time_in_hours(self):
+        hour = self.total_minutes/60
+        return "%.1f"%(self.total_minutes/60)
+
     def proper_login_time_string(self):
         eastern = pytz.timezone('US/Eastern')
-        eas_dt = self.login_time.astimezone(eastern)
+        east_dt = self.login_time.astimezone(eastern)
         format = '%Y-%m-%d %H:%M:%S'
-        return eas_dt.strftime(format)
+        return east_dt.strftime(format)
 
     def proper_logout_time_string(self):
         eastern = pytz.timezone('US/Eastern')
-        eas_dt = self.login_time.astimezone(eastern)
+        east_dt = self.logout_time.astimezone(eastern)
         format = '%Y-%m-%d %H:%M:%S'
-        return eas_dt.strftime(format)
+        return east_dt.strftime(format)
+
+    def proper_login_date_string(self):
+        eastern = pytz.timezone('US/Eastern')
+        east_date = self.login_time.astimezone(eastern)
+        format = '%m/%d/%Y'
+        return east_date.date().strftime(format)
+
+    def proper_logout_date_string(self):
+        eastern = pytz.timezone('US/Eastern')
+        east_date = self.logout_time.astimezone(eastern)
+        format = '%m/%d/%Y'
+        return east_date.date().strftime(format)
+
+    def proper_login_time_only_string(self):
+        eastern = pytz.timezone('US/Eastern')
+        east_date = self.login_time.astimezone(eastern)
+        format = '%I:%M:%S %p'
+        return east_date.time().strftime(format)
+
+    def proper_logout_time_only_string(self):
+        eastern = pytz.timezone('US/Eastern')
+        east_date = self.logout_time.astimezone(eastern)
+        format = '%I:%M:%S %p'
+        return east_date.time().strftime(format)
 
 
 def new_user_session_receiver(sender, instance, created, *args, **kwargs):

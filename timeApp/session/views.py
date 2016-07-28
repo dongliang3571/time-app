@@ -151,20 +151,23 @@ class HistorySessionView(View):
         elif keyword:
             print "have keyword only"
             try:
-                team = Team.objects.get(name__iexact=keyword)
+                team = Team.objects.get(name__contains=keyword)
             except ObjectDoesNotExist:
                 context['error'] = "No team found"
                 return render(request, 'session/session_history.html', context)
             else:
-                team_session = UserSession.objects.get_sessions_for_team(team)
+                team_session = UserSession.objects.get_inactive_sessions_for_team(team)
                 data_list = []
                 for session in team_session:
                     data = {}
-                    data['date'] = session.createAt.date()
-
-
-
-                context['team_session'] = team_session
+                    data['date'] = session.proper_login_date_string
+                    data['name'] = session.temporal_user.__unicode__()
+                    data['team'] = str(session.temporal_user.team)
+                    data['sign_in'] = session.proper_login_time_only_string()
+                    data['sign_out'] = session.proper_logout_time_only_string()
+                    data['total_hours'] = session.total_time_in_hours()
+                    data_list.append(data)
+                context['team_session'] = data_list
             return render(request, 'session/session_history.html', context)
         else:
             print "none"
