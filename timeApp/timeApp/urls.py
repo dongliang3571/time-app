@@ -21,7 +21,10 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from session.views import (TemporalUserCreateView, TemporalUserShowView,
                            UserSessionCreateView, UserSessionShowView,
-                           SessionCreateAPIView)
+                           SessionCreateAPIView, CurrentSessionListView,
+                           HistorySessionView)
+
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
@@ -40,7 +43,8 @@ urlpatterns = [
 
     # Rest framework Authentication urls
     url(r'^api/token-auth/?$', obtain_jwt_token),
-    url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
 
     ## API URL
     ## App: session
@@ -54,17 +58,30 @@ urlpatterns = [
 
     # Login
     url(r'^login/$', 'index.views.organizationLogin', name='index-login'),
-
     # Logout
     url(r'^logout/$', 'index.views.organizationLogout', name='index-logout'),
 
     # Dashboard
-    url(r'^session/dashboard/$', 'session.views.dashboard', name='session-dashboard'),
+    # url(r'^session/dashboard/$',
+    #     'session.views.dashboard',
+    #     name='session-dashboard'),
 
     # Add memeber
-    url(r'^session/add-member/$', login_required(TemporalUserCreateView.as_view()), name='session-add-member'),
+    url(r'^session/add-member/$',
+        login_required(TemporalUserCreateView.as_view()),
+        name='session-add-member'),
+    # Member detail
+    url(r'^session/members/(?P<pk>[-\w]+)/$',
+        login_required(TemporalUserShowView.as_view()),
+        name='session-memberdetail'),
+    # List members in dashboard
+    url(r'^session/members/$',
+        login_required(CurrentSessionListView.as_view()),
+        name='session-members'),
 
     # History
-    url(r'^session/history/$', 'session.views.history', name='session-history')
+    url(r'^session/history/$',
+        HistorySessionView.as_view(),
+        name='session-history')
 
 ]

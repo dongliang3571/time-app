@@ -27,7 +27,6 @@ body {
     background-color:#2F394E;
 }
 
-
 h2 {
     color:white;
     text-align:center;
@@ -42,4 +41,12 @@ h2 {
 
 h3 {
     margin-left:10px;
+}
+
+div.search {
+    padding-top: 20px;
+}
+
+label.search {
+    color: white;
 }

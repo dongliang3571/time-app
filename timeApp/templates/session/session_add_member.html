@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block css_js %}
-<link href="{% static "css/session/history.css" %}" rel="stylesheet" type="text/css">
-<script type="text/javascript "src="{% static "javascript/session/history.js" %}"></script>
+{% block top_css %}
+<link href="{% static "css/session/add_member.css" %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block content %}
@@ -18,57 +17,50 @@
 </ul>
 {% endif %}
 
-<div class="container contentContainer" id="topContainer">
-    <div class="row">
-     <h2>Currently, {{ total_members }} members and {{ total_visitors }} visitors are signed in!</h2>
-    </div>
-</div>
-
-</br>
-
-</br>
-</br>
-
-
 <div class="container" id="signedin">
 </br>
       <div class="row">
-          <div class="col-md-4 col-md-offset-2" id="form">
-            <h4> Enter member's info </h4>
-               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Name">
-               </div>
-               <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li><a href="#">Kanic</a></li>
-          <li><a href="#">Frip</a></li>
-          <li><a href="#">Gleam</a></li>
-          <li><a href="#">Komb</a></li>
-        </ul>
-      </div><!-- /btn-group -->
-    </br>
-               <div class="form-group">
-                <input type="text" class="form-control" placeholder="email">
-               </div>
-               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Pin number">
-               </div>
-               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Verify pin">
-               </div>
-               <button type="submit" class="btn new-btn ">Generate code</button>
+          <div class="col-md-4 col-md-offset-4" id="form">
+              <h4> Enter member's info </h4>
+              <form action="{% url "session-add-member" %}" method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      {{ form.first_name.errors }}
+                      {{ form.first_name }}
+                  </div>
+
+                  <div class="form-group">
+                      {{ form.last_name.errors }}
+                      {{ form.last_name }}
+                  </div>
+
+                  <div class="form-group">
+                      {{ form.email.errors }}
+                      {{ form.email }}
+                  </div>
+
+                   <div class="form-group">
+                       {{ form.team.errors }}
+                       {{ form.team }}
+                   </div>
+
+                   <button type="submit" class="btn new-btn ">Generate code</button>
+               </form>
                </br>
            </div>
 
-          <div class="col-md-4 col-md-offset-1" id="qr">
+          <!-- <div class="col-md-4 col-md-offset-1" id="qr">
             <h4>Generate Qr code here</h4>
             <button type="submit" class="btn new-btn">Print</button>
             <button type="submit" class="btn new-btn">Email</button>
-          </div>
+          </div> -->
 
       </div>
     </br>
 </div>
 
+{% endblock %}
+
+{% block bottom_js %}
+<script type="text/javascript "src="{% static "javascript/session/add_member.js" %}"></script>
 {% endblock %}

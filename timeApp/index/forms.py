@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 
 class SignInForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
     email = forms.EmailField(
         label='Email',
         max_length=100,

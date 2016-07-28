@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block css_js %}
+{% block top_css %}
 <link href="{% static "css/session/dashboard.css" %}" rel="stylesheet" type="text/css">
-<script type="text/javascript "src="{% static "javascript/session/dashboard.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -18,55 +17,35 @@
 </ul>
 {% endif %}
 
-<div class="container contentContainer" id="topContainer">
-    <div class="row">
-     <h2>Currently, 52 members and 0 visitors are signed in!</h2>
-    </div>
-</div>
-
-</br></br></br>
-
 <div class="container" id="signedin">
-      <div class="row">
-          <div class="col-md-8 col-md-offset-2">
-          <h3>Current requests</h3>
-          <table class="table table-striped">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h3>Current requests</h3>
+            <table class="table table-striped">
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>Company name</th>
-                <th>Status</th>
-                <th>Signed in at</th>
-                <th>Log out</th>
-
-              </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Company name</th>
+                    <th>Signed in at</th>
+                    <th>Log out</th>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <th>Ahmed Ben</th>
-                <th>Kanic</th>
-                <th>Team member</th>
-                <th>02:00pm</th>
-                <th> X </th>
-              </tr>
-              <tr>
-                <th>Dong Liang</th>
-                <th>Kanic</th>
-                <th>Guest</th>
-                <th>03:00pm</th>
-                <th>X</th>
-              </tr>
-              <tr>
-                <th>Devin Voorsanger</th>
-                <th>Zahn Center</th>
-                <th>Staff</th>
-                <th>05:00pm</th>
-                <th> X </th>
-              </tr>
+            {% for session in sessions %}
+                <tr>
+                    <th>{{ session.temporal_user.first_name }} {{ session.temporal_user.last_name }}</th>
+                    <th>{{ session.temporal_user.team }}</th>
+                    <th>{{ session.login_time }}</th>
+                </tr>
+            {% endfor %}
             </tbody>
           </table>
         </div>
     </div>
 </div>
 
+{% endblock %}
+
+{% block bottom_js %}
+<script type="text/javascript "src="{% static "javascript/session/dashboard.js" %}"></script>
 {% endblock %}

@@ -1,9 +1,13 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, HttpResponse
 from django.http.response import JsonResponse
+from django.views.generic import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
@@ -15,39 +19,16 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from .models import TemporalUser, UserSession
-from .forms import TemporalUserCreateForm
+from .models import Team, TemporalUser, UserSession
+from .forms import TemporalUserCreateForm, DateFilterForm
 
 
-class TemporalUserCreateView(CreateView):
-    model = TemporalUser
-    form_class = TemporalUserCreateForm
-    template_name = 'session/session_add_member.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(TemporalUserCreateView, self).get_context_data(**kwargs)
-        context['total_members'] = TemporalUser.objects.get_total_member_for_organization(self.request.user)
-        context['total_visitors'] = TemporalUser.objects.get_total_visitor_for_organization(self.request.user)
-        return context
-
-
-class TemporalUserShowView(DetailView):
-    model = TemporalUser
-    template_name = 'session/user_show.html'
-
-
-class UserSessionCreateView(CreateView):
-    model = UserSession
-    template_name = 'session/session_create.html'
-    fields = ['temporal_user']
-
-
-class UserSessionShowView(DetailView):
-    model = UserSession
-    template_name = 'session/session_show.html'
-
-
+##########################APIs####################################
 class SessionCreateAPIView(APIView):
+    """
+    Method: POST
+    Description: iPad will use this api to clock in or clock out
+    """
     # authentication_classes = (SessionAuthentication, JSONWebTokenAuthentication)
     # permission_classes = (IsAuthenticated,)
 
@@ -68,31 +49,127 @@ class SessionCreateAPIView(APIView):
                 current_session_single.is_active = False
                 current_session_single.logout_time = timezone.now()
                 current_session_single.save()
-                return Response({
-                    'is_active': current_session_single.is_active,
-                    'user': temp_user.first_name + ' ' + temp_user.last_name,
-                    'team': temp_user.team,
-                    'signed_in': current_session_single.proper_login_time_string(),
-                    'signed_out': current_session_single.proper_logout_time_string(),
-                    'total_minutes': current_session_single.calculate_total_minutes()
-                })
+                try:
+                    return Response({
+                        'is_active': current_session_single.is_active,
+                        'user': temp_user.first_name + ' ' + temp_user.last_name,
+                        'team': str(temp_user.team),
+                        'signed_in': current_session_single.proper_login_time_string(),
+                        'signed_out': current_session_single.proper_logout_time_string(),
+                        'total_minutes': current_session_single.calculate_total_minutes()
+                    })
+                except:
+                    return Response({
+                        'Error': 'Error happened when return the results'
+                    })
             else:
-                current_session_single = UserSession.objects.create(temporal_user=temp_user)
-                return Response({
-                    'is_active': current_session_single.is_active,
-                    'user': temp_user.first_name + ' ' + temp_user.last_name,
-                    'team': temp_user.team,
-                    'signed_in': current_session_single.proper_login_time_string()
-                })
+                try:
+                    current_session_single = UserSession.objects.create(temporal_user=temp_user)
+                    return Response({
+                        'is_active': current_session_single.is_active,
+                        'user': temp_user.first_name + ' ' + temp_user.last_name,
+                        'team': str(temp_user.team),
+                        'signed_in': current_session_single.proper_login_time_string()
+                    })
+                except:
+                    return Response({
+                        'Error': 'Error happened when return the results'
+                    })
         return Response({
             'Error': 'Server error, jumpped to end of function for no reason'
         })
 
 
-@login_required
-def dashboard(request):
-    messages.error(request, 'dashboard')
-    return render(request, 'session/session_dashboard.html')
+##############################Members####################################
+class TemporalUserCreateView(CreateView):
+    """
+    Method: GET, POST
+    Description: Show create form when making GET request, actually create the
+    member when making POST request
+    """
+    model = TemporalUser
+    form_class = TemporalUserCreateForm
+    template_name = 'session/session_add_member.html'
+
+    def form_valid(self, form):
+        form.instance.organization = self.request.user
+        return super(TemporalUserCreateView, self).form_valid(form)
+
+    def form_invalid(self):
+        print "form is invalid"
+        return super(TemporalUserCreateView, self).form_invalid()
+
+    def get_context_data(self, **kwargs):
+        context = super(TemporalUserCreateView, self).get_context_data(**kwargs)
+        context['total_members_session'] = UserSession.objects.get_active_members_sessions_for_organization(self.request.user).count()
+        context['total_visitors_session'] = UserSession.objects.get_active_visitors_sessions_for_organization(self.request.user).count()
+        return context
+
+
+class TemporalUserShowView(DetailView):
+    """
+    Method: GET
+    Description: Show the detail of a member
+    """
+    model = TemporalUser
+    template_name = 'session/session_member_detail.html'
+
+
+################################Sessions################################
+class CurrentSessionListView(ListView):
+    model = UserSession
+    context_object_name = 'sessions'
+    template_name = 'session/session_dashboard.html'
+
+    def get_queryset(self):
+        return UserSession.objects.get_active_sessions_for_organization(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(CurrentSessionListView, self).get_context_data(**kwargs)
+        context['total_members_session'] = UserSession.objects.get_active_members_sessions_for_organization(self.request.user).count()
+        context['total_visitors_session'] = UserSession.objects.get_active_visitors_sessions_for_organization(self.request.user).count()
+        return context
+
+
+class HistorySessionView(View):
+    def get(self, request):
+        context = {}
+        form = DateFilterForm()
+        context['form'] = form
+        end_date = request.GET.get('end_date', '')
+        start_date = request.GET.get('start_date', '')
+        keyword = request.GET.get('keyword', '')
+        if end_date and start_date and keyword:
+            print "all have"
+            return render(request, 'session/session_history.html', context)
+        elif start_date and keyword:
+            print "have 2"
+            return render(request, 'session/session_history.html', context)
+        elif start_date:
+            print "have start_date only"
+            return render(request, 'session/session_history.html', context)
+        elif keyword:
+            print "have keyword only"
+            try:
+                team = Team.objects.get(name__iexact=keyword)
+            except ObjectDoesNotExist:
+                context['error'] = "No team found"
+                return render(request, 'session/session_history.html', context)
+            else:
+                team_session = UserSession.objects.get_sessions_for_team(team)
+                data_list = []
+                for session in team_session:
+                    data = {}
+                    data['date'] = session.createAt.date()
+
+
+
+                context['team_session'] = team_session
+            return render(request, 'session/session_history.html', context)
+        else:
+            print "none"
+            return render(request, 'session/session_history.html', context)
+
 
 
 @login_required
@@ -101,7 +178,18 @@ def addMember(request):
     return render(request, 'session/session_add_member.html')
 
 
-@login_required
-def history(request):
-    messages.error(request, 'history')
-    return render(request, 'session/session_history.html')
+# @login_required
+# def history(request):
+#     messages.error(request, 'history')
+#     return render(request, 'session/session_history.html')
+
+
+class UserSessionCreateView(CreateView):
+    model = UserSession
+    template_name = 'session/session_create.html'
+    fields = ['temporal_user']
+
+
+class UserSessionShowView(DetailView):
+    model = UserSession
+    template_name = 'session/session_show.html'

@@ -38,7 +38,7 @@ h2 {
     border-top: 2px solid orange;
 }
 
-.new-btn{
+.new-btn, a.new-btn {
     background-color:#23B099;
     color:white;
     border-radius: 0px;
@@ -47,4 +47,8 @@ h2 {
 
 .form-control {
     border-radius:0px;
+}
+
+.button {
+    width: 200px;
 }

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block top_css %}
+<link href="{% static "css/session/add_member.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+{% include "navBar.html" %}
+
+{% if messages %}
+<ul class="messages alert alert-success">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h1>Member Detail</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p>First name: {{ object.first_name }}</p>
+            <p>Last name: {{ object.last_name }}</p>
+            <p>email: {{ object.email }}</p>
+            <p>Created at: {{ object.createAt }}</p>
+        </div>
+
+        <div class="col-md-4">
+            <p>QR code is:</p>
+            <p id="qrcode" data={{ object.qr_code_string }}></p>
+        </div>
+
+        <div class="col-md-4">
+            <button class="btn new-btn print button">Print</button>
+        </br>
+        </br>
+            <button class="btn new-btn button">Email</button>
+        </br>
+        </br>
+            <a class="btn new-btn button" href="{% url "session-add-member" %}">Add another member</a>
+        </div>
+    </div>
+</div>
+</br></br></br>
+
+
+{% endblock %}
+
+{% block bottom_js %}
+<script src="{% static "javascript/qrcode.min.js" %}"></script>
+<script type="text/javascript "src="{% static "javascript/session/member_detail.js" %}"></script>
+{% endblock %}

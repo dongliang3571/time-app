@@ -9,7 +9,7 @@ from session.models import TemporalUser, UserSession
 
 def index(request):
     if request.user.is_authenticated():
-        return redirect('session-dashboard')
+        return redirect('session-members')
     else:
         context = {}
         form = SignInForm()
@@ -28,7 +28,7 @@ def organizationLogin(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('session-dashboard')
+                return redirect('session-members')
             else:
                 messages.error(request, 'Invalid credentials')
                 return render(request, "index/index_index.html", context)

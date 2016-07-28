@@ -1,21 +1,56 @@
 from django.core.urlresolvers import reverse
-from django.forms import ModelForm
+from django import forms
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
-
-from .models import TemporalUser
+from .models import Team, TemporalUser
 
 
-class TemporalUserCreateForm(ModelForm):
+class TemporalUserCreateForm(forms.ModelForm):
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'First name'})
+        )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Last name'})
+        )
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email'})
+        )
+    team = forms.ModelChoiceField(
+        queryset=Team.objects.all(),
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+            })
+        )
+
     class Meta:
         model = TemporalUser
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name', 'email', 'team']
 
-    # def __init__(self, *args, **kwargs):
-    #     super(TemporalUserCreateForm, self).__init__(*args, **kwargs)
-    #     self.helper = FormHelper()
-    #     self.helper.form_id = 'temp-user-create'
-    #     self.helper.form_method = 'post'
-    #     self.helper.form_action = reverse('session-temporalusercreate')
-    #     self.helper.add_input(Submit('submit', 'Create'))
+
+class DateFilterForm(forms.Form):
+    start_date = forms.CharField(
+        label='Start date',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control datepicker',
+            'placeholder': '01/05/2016'})
+        )
+    end_date = forms.CharField(
+        label='End date',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control datepicker',
+            'placeholder': '02/05/2016'})
+        )
+    keyword = forms.CharField(
+        label='Keyword Search',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Type in Team name...'})
+        )

@@ -17,10 +17,13 @@ class Team(models.Model):
 
 
 class TemporalUserQuerySet(models.QuerySet):
-    def get_total_member_for_organization(self, organization):
+    def get_all_for_organization(self, organization):
+        return self.filter(organization=organization)
+
+    def get_all_members_for_organization(self, organization):
         return self.filter(organization=organization, is_visitor=False)
 
-    def get_total_visitor_for_organization(self, organization):
+    def get_all_visitors_for_organization(self, organization):
         return self.filter(organization=organization, is_visitor=True)
 
 
@@ -28,11 +31,20 @@ class TemporalUserManager(models.Manager):
     def get_queryset(self):
         return TemporalUserQuerySet(self.model, using=self._db)
 
-    def get_total_member_for_organization(self, organization):
-        return self.get_queryset().get_total_member_for_organization(organization)
+    def get_all_for_organization(self, organization):
+        return self.get_queryset().filter(organization=organization)
 
-    def get_total_visitor_for_organization(self, organization):
-        return self.get_queryset().get_total_visitor_for_organization(organization)
+    def get_all_members_for_organization(self, organization):
+        return self.get_queryset().get_all_members_for_organization(organization)
+
+    def get_all_visitors_for_organization(self, organization):
+        return self.get_queryset().get_all_visitors_for_organization(organization)
+
+    def count_all_members_for_organization(self, organization):
+        return self.get_all_members_for_organization(organization).count()
+
+    def count_all_visitors_for_organization(self, organization):
+        return self.get_all_visitors_for_organization(organization).count()
 
 
 class TemporalUser(models.Model):
@@ -54,7 +66,7 @@ class TemporalUser(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
     def get_absolute_url(self):
-        return reverse('session-temporalusershow', kwargs={'pk': self.pk})
+        return reverse('session-memberdetail', kwargs={'pk': self.pk})
 
 
 def new_temporal_user_receiver(sender, instance, created, *args, **kwargs):
@@ -77,12 +89,27 @@ post_save.connect(new_temporal_user_receiver, sender=TemporalUser)
 
 
 ###################################Session######################################
-# class UserSessionQuerySet(models.QuerySet):
-#     def get_sessions_for_day(self, date):
-#         return
-# class UserSessionManager(models.Manager):
-#     def get_queryset(self):
-#         return
+class UserSessionQuerySet(models.QuerySet):
+    def get_active_sessions(self):
+        return self.filter(is_active=True)
+
+    def get_active_sessions_for_organization(self, organization):
+        return self.get_active_sessions().filter(
+            temporal_user__organization=organization)
+
+    def get_active_visitors_sessions_for_organization(self, organization):
+        return self.get_active_sessions().filter(
+            temporal_user__organization=organization,
+            temporal_user__is_visitor=True)
+
+    def get_active_members_sessions_for_organization(self, organization):
+        return self.get_active_sessions().filter(
+            temporal_user__organization=organization,
+            temporal_user__is_visitor=False)
+
+    def get_sessions_for_team(self, team):
+        return self.filter(temporal_user__team=team)
+
 
 class UserSession(models.Model):
     temporal_user = models.ForeignKey(TemporalUser)
@@ -95,6 +122,8 @@ class UserSession(models.Model):
     total_minutes = models.IntegerField(default=0, null=True, blank=True)
     createAt = models.DateTimeField(verbose_name='date created',
                                     default=timezone.now)
+
+    objects = UserSessionQuerySet.as_manager()
 
     def __unicode__(self):
         return "{0} {1}".format(self.temporal_user.first_name,

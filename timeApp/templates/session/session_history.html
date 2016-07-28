@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block css_js %}
+{% block top_css %}
 <link href="{% static "css/session/history.css" %}" rel="stylesheet" type="text/css">
-<script type="text/javascript "src="{% static "javascript/session/history.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -19,51 +18,38 @@
 {% endif %}
 
 <div class="container contentContainer" id="topContainer">
-    <div class="row">
-     <h2>Currently, 52 members and 0 visitors are signed in!</h2>
+
+    <!-- search div -->
+    <div class="row search">
+        <form action="{% url "session-history" %}" method="get" class="form-horizontal">
+            <div class="row">
+                <div class="col-md-3 col-lg-3 col-md-offset-1 col-lg-offset-1">
+                    <label class="search">{{ form.start_date.label }}</label>
+                    {{ form.start_date }}
+                </div>
+
+                <div class="col-md-3 col-lg-3">
+                    <label class="search">{{ form.end_date.label }}</label>
+                    {{ form.end_date }}
+                </div>
+
+                <div class="col-md-3 col-lg-3">
+                    <label class="search">{{ form.keyword.label }}</label>
+                    {{ form.keyword }}
+                </div>
+
+                <div class="col-md-1 col-lg-1">
+                    </br>
+                    <button class="btn btn-new" type=submit>Search</button>
+                </div>
+
+            </div>
+        </form>
     </div>
-
-<div class="row">
-
-  <div class="col-md-4">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Start Date:</button>
-      </span>
-      <input type="text" class="form-control" placeholder="01/05/2016">
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-
-  <div class="col-md-4">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">End date:</button>
-      </span>
-      <input type="text" class="form-control" placeholder="02/05/2016">
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-
-
-<div class="col-md-4">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Type in Team name...">
-      <span class="input-group-btn"><button class="btn btn-default" type="button">Search</button>
-      </span>
-    </div><!-- /input-group -->
-  </div>
-
-
-
-    </div>
-  </br>
-  </div>
+    </br>
 </div>
-</div>
-</br>
 
 </br>
-</br>
-
 
 <div class="container" id="signedin">
       <div class="row">
@@ -95,35 +81,28 @@
                 <th>Signed in at</th>
                 <th>Signed out at</th>
                 <th>Total number of hours</th>
-
-
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th>05/05/2016</th>
-                <th>Ahmed Ben</th>
-                <th>Kanic</th>
-                <th>Team member</th>
-                <th>02:00pm</th>
-                <th> 05:00pm </th>
-                <th>3 hours</th>
-              </tr>
-              <tr>
-                <th>05/05/2016</th>
-                <th>Dong Liang</th>
-                <th>Kanic</th>
-                <th>Guest</th>
-                <th>03:00pm</th>
-                <th> 05:00pm </th>
-                <th>2 hours</th>
-              </tr>
-              <tr>
-              </tr>
+                {% for session in team_session %}
+                <tr>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                </tr>
+                {% endfor %}
             </tbody>
           </table>
         </div>
     </div>
 </div>
 
+{% endblock %}
+
+{% block bottom_js %}
+<script type="text/javascript "src="{% static "javascript/session/history.js" %}"></script>
 {% endblock %}
