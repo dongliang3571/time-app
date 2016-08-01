@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block css_js %}
+{% block top_css %}
 <link href="{% static "css/index/index.css" %}" rel="stylesheet" type="text/css">
-<script type="text/javascript "src="{% static "javascript/index/index.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -42,4 +41,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block bottom_js %}
+<script type="text/javascript "src="{% static "javascript/index/index.js" %}"></script>
 {% endblock %}

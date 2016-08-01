@@ -130,7 +130,7 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':
     'rest_framework_jwt.utils.jwt_response_payload_handler',
 
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600000),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600000000),
 }
 
 # crispy form

@@ -110,6 +110,22 @@ class UserSessionQuerySet(models.QuerySet):
     def get_inactive_sessions_for_team(self, team):
         return self.filter(temporal_user__team=team, is_active=False)
 
+    def get_inactive_sessions_for_start_date(self, date):
+        return self.filter(login_time__gte=date, is_active=False)
+
+    def get_inactive_sessions_for_team_start_date(self, team, date):
+        return self.filter(temporal_user__team=team,
+                           login_time__gte=date,
+                           is_active=False)
+
+    def get_inactive_sessions_for_team_start_date_end_date(self,
+                                                           team,
+                                                           start_date,
+                                                           end_date):
+        return self.filter(temporal_user__team=team,
+                           login_time__range=(start_date, end_date),
+                           is_active=False)
+
 
 class UserSession(models.Model):
     temporal_user = models.ForeignKey(TemporalUser)
