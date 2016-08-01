@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'timeApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django',
+        'USER': 'django',
+        'PASSWORD': 'ktqEYvixJB',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -110,6 +114,12 @@ STATICFILES_DIRS = (
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root', 'static')
+STATIC_URL = '/static/'
+
+
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_root', 'media')
+MEDIA_URL = '/media/'
 LOGIN_URL = '/'
 
 SITE_ID = 1
