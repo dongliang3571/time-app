@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'timeApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django',
-        'USER': 'django',
-        'PASSWORD': 'ktqEYvixJB',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': 'd79crh2arvusna',
+        'USER': 'zsbrmnrygmvbzz',
+        'PASSWORD': '9WMp4WeBCimiI9lyPHfJdKEgOD',
+        'HOST': 'ec2-23-21-234-201.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
