@@ -111,21 +111,21 @@ class TemporalUserCreateView(CreateView):
         print "form is invalid"
         return super(TemporalUserCreateView, self).form_invalid()
 
-    def get_context_data(self, **kwargs):
-        context = super(TemporalUserCreateView, self).get_context_data(**kwargs)
-        context['total_members_session'] = (
-            UserSession
-            .objects
-            .get_active_members_sessions_for_organization(self.request.user)
-            .count()
-            )
-        context['total_visitors_session'] = (
-            UserSession
-            .objects
-            .get_active_visitors_sessions_for_organization(self.request.user)
-            .count()
-            )
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(TemporalUserCreateView, self).get_context_data(**kwargs)
+    #     context['total_members_session'] = (
+    #         UserSession
+    #         .objects
+    #         .get_active_members_sessions_for_organization(self.request.user)
+    #         .count()
+    #         )
+    #     context['total_visitors_session'] = (
+    #         UserSession
+    #         .objects
+    #         .get_active_visitors_sessions_for_organization(self.request.user)
+    #         .count()
+    #         )
+    #     return context
 
 
 class TemporalUserShowView(DetailView):
@@ -148,21 +148,21 @@ class CurrentSessionListView(ListView):
                 .objects
                 .get_active_sessions_for_organization(self.request.user))
 
-    def get_context_data(self, **kwargs):
-        context = super(CurrentSessionListView, self).get_context_data(**kwargs)
-        context['total_members_session'] = (
-            UserSession
-            .objects
-            .get_active_members_sessions_for_organization(self.request.user)
-            .count()
-            )
-        context['total_visitors_session'] = (
-            UserSession
-            .objects
-            .get_active_visitors_sessions_for_organization(self.request.user)
-            .count()
-            )
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(CurrentSessionListView, self).get_context_data(**kwargs)
+    #     context['total_members_session'] = (
+    #         UserSession
+    #         .objects
+    #         .get_active_members_sessions_for_organization(self.request.user)
+    #         .count()
+    #         )
+    #     context['total_visitors_session'] = (
+    #         UserSession
+    #         .objects
+    #         .get_active_visitors_sessions_for_organization(self.request.user)
+    #         .count()
+    #         )
+    #     return context
 
 
 class HistorySessionView(View):

@@ -11,6 +11,8 @@ from django.utils import timezone
 
 class Team(models.Model):
     name = models.CharField(max_length=30)
+    createAt = models.DateTimeField(verbose_name='date created',
+                                    default=timezone.now)
 
     def __unicode__(self):
         return self.name
