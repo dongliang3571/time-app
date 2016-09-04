@@ -18,8 +18,7 @@ body {
 }
 
 #signedin {
-    border-top: 2px solid #1CB796;
-    background-color: white;
+    background-color: #F2F2F3;
 }
 
 #topContainer {
@@ -30,4 +29,18 @@ body {
 h2 {
     color:white;
     text-align:center;
+}
+
+.emp-list {
+    background-color: white;
+    margin-left: 3%;
+}
+
+.current-emp {
+    background-color: white;
+    margin-left: 2%;
+}
+
+.table>tbody>tr>td {
+    vertical-align: middle;
 }

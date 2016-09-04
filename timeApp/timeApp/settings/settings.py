@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import datetime
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,6 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Email setting
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'dongliang3571'
+EMAIL_HOST_PASSWORD = 'd8928269'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'DoNotReply@timeapp.com'
 
 # Application definition
 
@@ -41,7 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django_extensions',
     'rest_framework',
-    'crispy_forms',
+    'registration',
     'session',
 )
 
@@ -80,30 +87,40 @@ WSGI_APPLICATION = 'timeApp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd79crh2arvusna',
+#         'USER': 'zsbrmnrygmvbzz',
+#         'PASSWORD': '9WMp4WeBCimiI9lyPHfJdKEgOD',
+#         'HOST': 'ec2-23-21-234-201.compute-1.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd79crh2arvusna',
-        'USER': 'zsbrmnrygmvbzz',
-        'PASSWORD': '9WMp4WeBCimiI9lyPHfJdKEgOD',
-        'HOST': 'ec2-23-21-234-201.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'NAME': 'time_app',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'US/Eastern'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -124,6 +141,19 @@ LOGIN_URL = '/'
 
 SITE_ID = 1
 
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
+
+####### registration redux #######
+
+# One-week activation window; you may, of course, use a different value.
+ACCOUNT_ACTIVATION_DAYS = 7
+# Automatically log the user in.
+REGISTRATION_AUTO_LOGIN = True
+# Optional. If this is False, registration emails will be send in plain text.
+# If this is True, emails will be sent as HTML. Defaults to True.
+REGISTRATION_EMAIL_HTML = False
+
 # rest_framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -140,8 +170,5 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':
     'rest_framework_jwt.utils.jwt_response_payload_handler',
 
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600000000),
+    # 'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600000000),
 }
-
-# crispy form
-CRISPY_TEMPLATE_PACK = 'bootstrap3'

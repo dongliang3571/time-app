@@ -6,6 +6,9 @@ ul.messages {
     z-index: 100;
     position: fixed;
     top: 0px;
-    width: 100%;
-    margin-top: 3%;
+}
+
+.btn-custom {
+    background-color: #23B099;
+    color: white;
 }

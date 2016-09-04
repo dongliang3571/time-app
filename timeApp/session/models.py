@@ -1,3 +1,4 @@
+from decimal import Decimal
 import random
 import pytz
 
@@ -9,7 +10,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 
-class Team(models.Model):
+class Department(models.Model):
     name = models.CharField(max_length=30)
     createAt = models.DateTimeField(verbose_name='date created',
                                     default=timezone.now)
@@ -52,10 +53,12 @@ class TemporalUserManager(models.Manager):
 class TemporalUser(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    full_name = models.CharField(max_length=50)
     email = models.EmailField(verbose_name='email address', max_length=255,
                               unique=True)
     organization = models.ForeignKey(User, null=True, blank=True)
-    team = models.ForeignKey(Team, null=True, blank=True)
+    department= models.ForeignKey(Department, null=True, blank=True)
+    wage = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2)
     qr_code_string = models.CharField(max_length=300, null=True, blank=True)
     pin_number = models.CharField(max_length=4, null=True, blank=True)
     is_visitor = models.BooleanField(default=False)
@@ -78,12 +81,15 @@ def new_temporal_user_receiver(sender, instance, created, *args, **kwargs):
     """
     if created:
         post_save.disconnect(new_temporal_user_receiver, sender=sender)
+        instance.full_name = instance.first_name + ' ' + instance.last_name
         instance.qr_code_string = (instance.first_name
                                    + '_'
                                    + instance.last_name
                                    + str(random.randint(1, 10))
                                    + str(random.randint(1, 10))
-                                   + instance.email)
+                                   + ''.join(random.sample(instance.email,
+                                                           len(instance.email)))
+                                   )
         instance.save()
         post_save.connect(new_temporal_user_receiver, sender=sender)
 
@@ -109,22 +115,32 @@ class UserSessionQuerySet(models.QuerySet):
             temporal_user__organization=organization,
             temporal_user__is_visitor=False)
 
-    def get_inactive_sessions_for_team(self, team):
-        return self.filter(temporal_user__team=team, is_active=False)
+    def get_inactive_sessions_for_employee(self, employee):
+        return self.filter(temporal_user=employee, is_active=False)
 
     def get_inactive_sessions_for_start_date(self, date):
-        return self.filter(login_time__gte=date, is_active=False)
+        print(date)
+        UTC = pytz.timezone('UTC')
+        newDate = UTC.localize(date)
+        print(newDate)
+        return self.filter(login_time__gte=newDate, is_active=False)
 
-    def get_inactive_sessions_for_team_start_date(self, team, date):
-        return self.filter(temporal_user__team=team,
+    def get_inactive_sessions_for_employee_start_date(self, employee, date):
+        return self.filter(temporal_user=employee,
                            login_time__gte=date,
                            is_active=False)
 
-    def get_inactive_sessions_for_team_start_date_end_date(self,
-                                                           team,
+    def get_inactive_sessions_for_start_date_end_date(self,
+                                                      start_date,
+                                                      end_date):
+        return self.filter(login_time__range=(start_date, end_date),
+                           is_active=False)
+
+    def get_inactive_sessions_for_employee_start_date_end_date(self,
+                                                           employee,
                                                            start_date,
                                                            end_date):
-        return self.filter(temporal_user__team=team,
+        return self.filter(temporal_user=employee,
                            login_time__range=(start_date, end_date),
                            is_active=False)
 
@@ -138,6 +154,7 @@ class UserSession(models.Model):
     is_active = models.BooleanField(verbose_name='check if session is active',
                                     default=False)
     total_minutes = models.IntegerField(default=0, null=True, blank=True)
+    total_salary = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     createAt = models.DateTimeField(verbose_name='date created',
                                     default=timezone.now)
 
@@ -167,48 +184,48 @@ class UserSession(models.Model):
         hour = self.total_minutes/60
         return "%.1f"%(self.total_minutes/60)
 
+    def total_time_in_hours_float(self):
+        return Decimal(self.total_minutes/60.0)
+
     def proper_login_time_string(self):
-        eastern = pytz.timezone('US/Eastern')
-        east_dt = self.login_time.astimezone(eastern)
         format = '%Y-%m-%d %H:%M:%S'
-        return east_dt.strftime(format)
+        return self.login_time.strftime(format)
 
     def proper_logout_time_string(self):
-        eastern = pytz.timezone('US/Eastern')
-        east_dt = self.logout_time.astimezone(eastern)
         format = '%Y-%m-%d %H:%M:%S'
-        return east_dt.strftime(format)
+        return self.logout_time.strftime(format)
 
     def proper_login_date_string(self):
-        eastern = pytz.timezone('US/Eastern')
-        east_date = self.login_time.astimezone(eastern)
         format = '%m/%d/%Y'
-        return east_date.date().strftime(format)
+        return self.login_time.strftime(format)
 
     def proper_logout_date_string(self):
-        eastern = pytz.timezone('US/Eastern')
-        east_date = self.logout_time.astimezone(eastern)
         format = '%m/%d/%Y'
-        return east_date.date().strftime(format)
+        return self.logout_time.strftime(format)
 
     def proper_login_time_only_string(self):
-        eastern = pytz.timezone('US/Eastern')
-        east_date = self.login_time.astimezone(eastern)
         format = '%I:%M:%S %p'
-        return east_date.time().strftime(format)
+        return self.login_time.strftime(format)
 
     def proper_logout_time_only_string(self):
-        eastern = pytz.timezone('US/Eastern')
-        east_date = self.logout_time.astimezone(eastern)
         format = '%I:%M:%S %p'
-        return east_date.time().strftime(format)
+        return self.logout_time.strftime(format)
 
+    def calculate_total_salary(self):
+        self.total_salary = self.temporal_user.wage * self.total_time_in_hours_float()
+        self.save()
+        return self.total_salary
+
+    def total_salary_string(self):
+        return self.total_salary
+
+    def get_name(self):
+        return self.temporal_user.full_name
 
 def new_user_session_receiver(sender, instance, created, *args, **kwargs):
     if created:
         post_save.disconnect(new_user_session_receiver, sender=sender)
         instance.is_active = True
-        instance.login_time = timezone.now()
         instance.save()
         post_save.connect(new_user_session_receiver, sender=sender)
 

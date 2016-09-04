@@ -40,8 +40,14 @@
                   </div>
 
                   <div class="form-group">
-                      {{ form.team.errors }}
-                      {{ form.team }}
+                      {{ form.department.errors }}
+                      {{ form.department }}
+                      <a id="add-department" href>Add Department</a>
+                  </div>
+
+                  <div class="form-group">
+                      {{ form.wage.errors }}
+                      {{ form.wage }}
                   </div>
 
                    <button type="submit" class="btn new-btn ">Generate code</button>
@@ -62,5 +68,5 @@
 {% endblock %}
 
 {% block bottom_js %}
-<script type="text/javascript "src="{% static "javascript/session/add_member.js" %}"></script>
+<script type="text/javascript "src="{% static "javascript/session/members.js" %}"></script>
 {% endblock %}

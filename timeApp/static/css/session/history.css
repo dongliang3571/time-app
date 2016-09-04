@@ -18,8 +18,7 @@ body {
 }
 
 #signedin {
-    border-top: 2px solid #1CB796;
-    background-color: white;
+    background-color: #F2F2F3;
 }
 
 #topContainer {
@@ -49,4 +48,14 @@ div.search {
 
 label.search {
     color: white;
+}
+
+.salary {
+    background-color: white;
+    margin-left: 6%;
+}
+
+.sessions {
+    background-color: white;
+    margin-left: 2%;
 }

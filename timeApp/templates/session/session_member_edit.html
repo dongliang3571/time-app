@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block top_css %}
+<link href="{% static "css/session/add_member.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+{% include "navBar.html" %}
+
+{% if messages %}
+<ul class="messages alert alert-success">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h1>Edit member profile</h1>
+
+<div class="container" id="signedin">
+</br>
+</br>
+      <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+              <form action="{% url "session-member-edit" editForm.instance.pk %}" method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      {{ editForm.first_name.errors }}
+                      {{ editForm.first_name }}
+                  </div>
+
+                  <div class="form-group">
+                      {{ editForm.last_name.errors }}
+                      {{ editForm.last_name }}
+                  </div>
+
+                  <div class="form-group">
+                      {{ editForm.email.errors }}
+                      {{ editForm.email }}
+                  </div>
+
+                  <div class="form-group">
+                      {{ editForm.department.errors }}
+                      {{ editForm.department }}
+                      <a id="add-department" href>Add Department</a>
+                  </div>
+
+                  <div class="form-group">
+                      {{ editForm.wage.errors }}
+                      {{ editForm.wage }}
+                  </div>
+
+                  <button type="submit" class="btn btn-custom">Save</button>
+                  <br>
+                  <br>
+              </form>
+          </div>
+      </div>
+  </div>
+
+{% endblock %}
+
+{% block bottom_js %}
+<script src="{% static "javascript/qrcode.min.js" %}"></script>
+<script type="text/javascript "src="{% static "javascript/session/member_detail.js" %}"></script>
+{% endblock %}

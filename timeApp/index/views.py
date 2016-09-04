@@ -38,6 +38,7 @@ def organizationLogin(request):
     else:
         return redirect('index-index')
 
+
 def organizationLogout(request):
     logout(request)
     messages.success(request, 'You have successfully logged out.')

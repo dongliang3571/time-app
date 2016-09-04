@@ -23,8 +23,8 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from session.views import (TemporalUserCreateView, TemporalUserShowView,
                            UserSessionCreateView, UserSessionShowView,
-                           SessionCreateAPIView, CurrentSessionListView,
-                           HistorySessionView)
+                           SessionCreateAPIView, CurrentPunchedInEmployees,
+                           EditEmployees, HistorySessionView)
 
 
 urlpatterns = [
@@ -58,7 +58,9 @@ urlpatterns = [
     # Index
     url(r'^$', 'index.views.index', name='index-index'),
 
+
     # Login
+    url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^login/$', 'index.views.organizationLogin', name='index-login'),
     # Logout
     url(r'^logout/$', 'index.views.organizationLogout', name='index-logout'),
@@ -78,8 +80,16 @@ urlpatterns = [
         name='session-memberdetail'),
     # List members in dashboard
     url(r'^session/members/$',
-        login_required(CurrentSessionListView.as_view()),
+        login_required(CurrentPunchedInEmployees.as_view()),
         name='session-members'),
+    # Edit members profile
+    url(r'^session/members/(?P<pk>[-\w]+)/edit$',
+        login_required(EditEmployees.as_view()),
+        name='session-member-edit'),
+    # Delete members
+    url(r'^session/members/(?P<pk>[-\w]+)/delete$',
+        'session.views.DeleteEmployees',
+        name='session-member-delete'),
 
     # History
     url(r'^session/history/$',

@@ -10,33 +10,62 @@
 {% include "navBar.html" %}
 
 {% if messages %}
-<ul class="messages alert alert-success">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+<div id="message" class="row" data-dismiss="alert">
+    <ul class="messages alert alert-success col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }} <a id="close" class="close">X</a></li>
+        {% endfor %}
+    </ul>
+</div>
 {% endif %}
 
-<div class="container" id="signedin">
+<div class="container-fluid" id="signedin">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h3>Current requests</h3>
+        <div class="col-md-offset-1 col-md-4 emp-list">
+            <h3>All employees
+                <a class="btn btn-custom" href="{% url "session-add-member" %}">Add a new employee</a>
+            </h3>
             <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Company name</th>
+                    <th>Department</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in allEmp %}
+                    <tr>
+                        <td>{{ emp.first_name }} {{ emp.last_name }}</td>
+                        <td>{{ emp.department }}</td>
+                        <td>
+                            <a id="edit" class="btn btn-custom" href="{% url "session-member-edit" emp.pk %}">Edit</a>
+                            <a id="delete" class="btn btn-custom" href="{% url "session-member-delete" emp.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-7 current-emp">
+            <h3>Current employees</h3>
+            <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
                     <th>Signed in at</th>
                     <th>Log out</th>
                 </tr>
             </thead>
             <tbody>
-            {% for session in sessions %}
+            {% for session in currentSessions %}
                 <tr>
-                    <th>{{ session.temporal_user.first_name }} {{ session.temporal_user.last_name }}</th>
-                    <th>{{ session.temporal_user.team }}</th>
-                    <th>{{ session.login_time }}</th>
-                    <th><a href=#>x</a></th>
+                    <td>{{ session.temporal_user.first_name }} {{ session.temporal_user.last_name }}</td>
+                    <td>{{ session.temporal_user.team }}</td>
+                    <td>{{ session.login_time }}</td>
+                    <td><a href=#>x</a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -48,5 +77,5 @@
 {% endblock %}
 
 {% block bottom_js %}
-<script type="text/javascript "src="{% static "javascript/session/dashboard.js" %}"></script>
+<script type="text/javascript "src="{% static "javascript/session/members.js" %}"></script>
 {% endblock %}

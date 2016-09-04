@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django import forms
 
-from .models import Team, TemporalUser
+from .models import Department, TemporalUser
 
 
 class TemporalUserCreateForm(forms.ModelForm):
@@ -20,16 +20,23 @@ class TemporalUserCreateForm(forms.ModelForm):
             'class': 'form-control',
             'placeholder': 'Email'})
         )
-    team = forms.ModelChoiceField(
-        queryset=Team.objects.all(),
+    department = forms.ModelChoiceField(
+        queryset=Department.objects.all(),
         widget=forms.Select(attrs={
             'class': 'form-control'
-            })
+            }),
+        empty_label="Optional",
+        required=False
+        )
+    wage = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Wage'})
         )
 
     class Meta:
         model = TemporalUser
-        fields = ['first_name', 'last_name', 'email', 'team']
+        fields = ['first_name', 'last_name', 'email', 'department', 'wage']
 
 
 class DateFilterForm(forms.Form):
@@ -52,5 +59,5 @@ class DateFilterForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Type in Team name...'})
+            'placeholder': 'Type in employee name...'})
         )

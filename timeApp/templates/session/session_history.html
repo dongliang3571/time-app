@@ -42,12 +42,6 @@
                     </br>
                     <button class="btn btn-new" type=submit>Search</button>
                 </div>
-
-                <div class="col-md-1 col-lg-1">
-                    </br>
-                    <button id="clear" class="btn btn-new">Clear</button>
-                </div>
-
             </div>
         </form>
     </div>
@@ -56,53 +50,61 @@
 
 </br>
 
-<div class="container" id="signedin">
+<div class="container-fluid" id="signedin">
       <div class="row">
-        <h3>Total number of hours for Kanic</h3>
-          <div class="col-md-10 col-md-offset-3">
-             <div class="col-md-4">
-              <div class="btn-group" role="group">
-                <button type="submit" class="btn new-btn">Ahmed Ben</button>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="btn-group" role="group">
-                <button type="submit" class="btn new-btn">Dong Liang</button>
-              </div>
+          <div class="col-md-offset-1 col-md-3 salary">
+              <h3>Total Earnings</h3>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Total salary</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    {% for employee in employees_salary %}
+                    <tr>
+                        <td>{{ employee.name }}</td>
+                        <td>{{ employee.salary }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
           </div>
-        </div>
 
-        </br>
-        </br>
-        </br>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Name</th>
-                <th>Company name</th>
-                <th>Signed in at</th>
-                <th>Signed out at</th>
-                <th>Total number of hours</th>
-              </tr>
-            </thead>
-
-            <tbody>
-                {% for session in team_session %}
-                <tr>
-                    <td>{{ session.date }}</td>
-                    <td>{{ session.name }}</td>
-                    <td>{{ session.team }}</td>
-                    <td>{{ session.sign_in }}</td>
-                    <td>{{ session.sign_out }}</td>
-                    <td>{{ session.total_hours }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        <div>{{ error }}</div>
-    </div>
+          <div class="col-md-7 sessions">
+              <h3>Total sessions for Kanic</h3>
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Name</th>
+                          <th>Department</th>
+                          <th>Signed in at</th>
+                          <th>Signed out at</th>
+                          <th>Total hours</th>
+                          <th>Total salary</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for session in employees_sessions %}
+                      <tr>
+                          <td>{{ session.date }}</td>
+                          <td>{{ session.name }}</td>
+                          <td>{{ session.department }}</td>
+                          <td>{{ session.sign_in }}</td>
+                          <td>{{ session.sign_out }}</td>
+                          <td>{{ session.total_hours }}</td>
+                          <td>{{ session.total_salary }}</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+              <div>{{ error }}</div>
+          </div>
+      </div>
+  </div>
 </div>
 
 {% endblock %}
