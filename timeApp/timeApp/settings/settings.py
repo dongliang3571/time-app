@@ -30,8 +30,8 @@ ALLOWED_HOSTS = []
 
 # Email setting
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'dongliang3571'
-EMAIL_HOST_PASSWORD = 'd8928269'
+EMAIL_HOST_USER = os.environ['sendgrid_username']
+EMAIL_HOST_PASSWORD = os.environ['sendgrid_password']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'DoNotReply@timeapp.com'
