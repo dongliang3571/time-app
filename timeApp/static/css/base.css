@@ -12,3 +12,7 @@ ul.messages {
     background-color: #23B099;
     color: white;
 }
+
+.navbar {
+    margin-bottom: 0;
+}

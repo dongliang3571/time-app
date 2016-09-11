@@ -20,9 +20,9 @@
 
        	<ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-        <li><a href="{% url "index-logout" %}">{{ user.username }} Sign Out</a></li>
+        <li><a href="{% url 'auth_logout' %}?next=/">{{ user.username }} Sign Out</a></li>
         {% else %}
-        <li><a href="{% url "index-index" %}">Sign In</a></li>
+        <li><a href="{% url 'auth_login' %}">Sign In</a></li>
         {% endif %}
         </ul>
 

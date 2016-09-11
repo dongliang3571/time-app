@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.http.response import JsonResponse
 from django.views.generic import View
 from django.views.generic.detail import DetailView
@@ -44,13 +44,11 @@ class SessionCreateAPIView(APIView):
         try:
             time_now = datetime.strptime(time_string, format)
         except ValueError:
-            print 'Date Time format is not correct'
             return Response({'Error': 'Date Time format is not correct'})
         try:
             # try if the QRcode matches an existing user
             temp_user = TemporalUser.objects.get(qr_code_string=qr_code_string)
         except ObjectDoesNotExist:
-            print "QR code is not found in database"
             return Response({'Error': 'QR code is not found in database'})
         else:
             current_session = UserSession.objects.filter(temporal_user=temp_user,
@@ -119,8 +117,24 @@ class TemporalUserCreateView(CreateView):
         return super(TemporalUserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
-        print "form is invalid"
+        print "form invalid"
         return super(TemporalUserCreateView, self).form_invalid(form)
+
+    def get_form(self, form_class=form_class):
+        form_instance = super(TemporalUserCreateView, self).get_form(form_class)
+        form_instance.fields['department'].queryset = (
+            Department.objects.filter(organization=self.request.user)
+        )
+        return form_instance
+
+    def get_context_data(self, **kwargs):
+        dict_objects = (
+            super(TemporalUserCreateView, self).get_context_data(**kwargs)
+        )
+        dict_objects['departments'] = (
+            Department.objects.filter(organization=self.request.user)
+        )
+        return dict_objects
 
 
 class TemporalUserShowView(DetailView):
@@ -130,6 +144,46 @@ class TemporalUserShowView(DetailView):
     """
     model = TemporalUser
     template_name = 'session/session_member_detail.html'
+
+
+class EditEmployees(View):
+    def get(self, request, pk):
+        template_name = 'session/session_member_edit.html'
+        context = {}
+        employee = get_object_or_404(TemporalUser, pk=pk)
+        editForm = TemporalUserCreateForm(instance=employee)
+        context['employee'] = employee
+        context['editForm'] = editForm
+        context['qr_code_string'] = employee.qr_code_string
+        return render(request, template_name, context)
+
+    def post(self, request, pk):
+        employee = get_object_or_404(TemporalUser, pk=pk)
+        editForm = TemporalUserCreateForm(request.POST, instance=employee)
+        context = {}
+        if editForm.is_valid():
+            editForm.save()
+            messages.success(request, 'edited employee profile')
+            return redirect(employee.get_absolute_url())
+        context['editForm'] = editForm
+        template_name = 'session/session_member_edit.html'
+        return render(request, template_name, context)
+
+
+@login_required
+def DeleteEmployees(request, pk):
+    mesg = ''
+    employee = get_object_or_404(TemporalUser, pk=pk)
+    try:
+        employee.delete()
+    except:
+        mesg = 'failed to delete'
+        messages.error(request, mesg)
+        return redirect('session-members')
+    else:
+        mesg = 'employee {0} has been deleted'.format(employee.full_name)
+        messages.success(request, mesg)
+        return redirect('session-members')
 
 
 ################################Sessions################################
@@ -150,37 +204,45 @@ class CurrentPunchedInEmployees(View):
         return render(request, template_name, context)
 
 
-class EditEmployees(View):
-    def get(self, request, pk):
-        template_name = 'session/session_member_edit.html'
-        context = {}
-        employee = get_object_or_404(TemporalUser, pk=pk)
-        editForm = TemporalUserCreateForm(instance=employee)
-        context['employee'] = employee
-        context['editForm'] = editForm
-        return render(request, template_name, context)
-
-    def post(self, request, pk):
-        employee = get_object_or_404(TemporalUser, pk=pk)
-        editForm = TemporalUserCreateForm(request.POST, instance=employee)
-        context = {}
-        if editForm.is_valid():
-            template_name = 'session/session_success.html'
-            editForm.save()
-            context['action'] = 'edited'
-            return render(request, template_name, context)
-        context['editForm'] = editForm
-        template_name = 'session/session_member_edit.html'
-        return render(request, template_name, context)
-
-
 @login_required
-def DeleteEmployees(request, pk):
-    employee = get_object_or_404(TemporalUser, pk=pk)
-    employee.delete()
-    template_name = 'session/session_success.html'
-    context = {'action': 'deleted'}
-    return render(request, template_name, context)
+def clockOut(request):
+    '''
+    Manually clock out an employee
+    '''
+    # grab the QRcode string from post request body
+    if request.method == 'POST':
+        qr_code_string = request.POST.get('qr_code_string', '')
+        time_string = request.POST.get('time_now', '')
+        format = '%Y-%m-%d %H:%M:%S'
+        try:
+            time_now = datetime.strptime(time_string, format)
+        except ValueError:
+            messages.error(request, 'Error occured, please refresh page.')
+            return redirect('session-members')
+        try:
+            # try if the QRcode matches an existing user
+            temp_user = TemporalUser.objects.get(qr_code_string=qr_code_string)
+        except ObjectDoesNotExist:
+            messages.error(request, 'Error occured, object not found.')
+            return redirect('session-members')
+        else:
+            current_session = UserSession.objects.filter(temporal_user=temp_user,
+                                                         is_active=True)
+            mesg = ''
+            if current_session:
+                current_session_single = current_session[0]
+                current_session_single.is_active = False
+                current_session_single.logout_time = time_now
+                current_session_single.calculate_total_minutes()
+                current_session_single.calculate_total_salary()
+                current_session_single.save()
+                mesg = 'Logged out employee {0}.'.format(
+                    current_session_single.temporal_user.full_name
+                )
+            messages.success(request, mesg)
+            return redirect('session-members')
+    else:
+        return redirect('index-index')
 
 
 class HistorySessionView(View):
@@ -271,25 +333,42 @@ class HistorySessionView(View):
             return render(request, 'session/session_history.html', context)
 
 
+################################ Department ###################################
+@login_required
+def addDepartment(request):
+    if request.method == 'POST':
+        departments = request.POST.getlist('department', None)
+        department_list = []
+        for department in departments:
+            if str(department) == '':
+                pass
+            else:
+                department_list.append(str(department))
+
+        if len(department_list) > 0:
+            for department in department_list:
+                Department.objects.create(organization=request.user,
+                                          name=department)
+            messages.success(request, 'Added new department(s)')
+            return redirect('session-add-member')
+        else:
+            messages.success(request, 'At least one new department needed')
+            return redirect('session-add-member')
+    else:
+        return redirect('session-add-member')
+
 
 @login_required
-def addMember(request):
-    messages.error(request, 'add member')
-    return render(request, 'session/session_add_member.html')
-
-
-# @login_required
-# def history(request):
-#     messages.error(request, 'history')
-#     return render(request, 'session/session_history.html')
-
-
-class UserSessionCreateView(CreateView):
-    model = UserSession
-    template_name = 'session/session_create.html'
-    fields = ['temporal_user']
-
-
-class UserSessionShowView(DetailView):
-    model = UserSession
-    template_name = 'session/session_show.html'
+def deleteDepartment(request, pk):
+    mesg = ''
+    department= get_object_or_404(Department, pk=pk)
+    try:
+        department.delete()
+    except:
+        mesg = 'failed to delete'
+        messages.error(request, mesg)
+        return redirect('session-add-member')
+    else:
+        mesg = 'department {0} has been deleted'.format(department.name)
+        messages.success(request, mesg)
+        return redirect('session-add-member')

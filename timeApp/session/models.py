@@ -11,6 +11,7 @@ from django.utils import timezone
 
 
 class Department(models.Model):
+    organization = models.ForeignKey(User)
     name = models.CharField(max_length=30)
     createAt = models.DateTimeField(verbose_name='date created',
                                     default=timezone.now)

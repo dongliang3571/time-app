@@ -18,58 +18,53 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
 from rest_framework_jwt.views import obtain_jwt_token
+from registration.backends.simple.views import RegistrationView
 
 from session.views import (TemporalUserCreateView, TemporalUserShowView,
-                           UserSessionCreateView, UserSessionShowView,
                            SessionCreateAPIView, CurrentPunchedInEmployees,
                            EditEmployees, HistorySessionView)
 
+class MyRegistrationView(RegistrationView):
+    def get_success_url(self,request):
+        return reverse('session-members')
 
 urlpatterns = [
+    ###########################################################################
+    ################################# Admin Panel #############################
+    ###########################################################################
     url(r'^admin/', include(admin.site.urls)),
 
+    ###########################################################################
+    ################################# API URL #################################
+    ###########################################################################
     ## App: session
-    # User
-    # url(r'^session/user/create/$', TemporalUserCreateView.as_view(),
-    #     name='session-temporalusercreate'),
-    # url(r'^session/user/(?P<pk>[-\w]+)/$', TemporalUserShowView.as_view(),
-    #     name='session-temporalusershow'),
-
     # Session
-    # url(r'^session/create/$', UserSessionCreateView.as_view(),
-    #     name='session-usersessioncreate'),
-    # url(r'^session/(?P<pk>[-\w]+)/$', UserSessionShowView.as_view(),
-    #     name='session-usersessionshow'),
+    url(r'^api/session-create/?$', SessionCreateAPIView.as_view(), name='session-create'),
 
-    # Rest framework Authentication urls
+    ###########################################################################
+    ############################ Web app URL ##################################
+    ###########################################################################
+
+    ## App: rest_framework
+    # Rest framework Web Authentication urls
     url(r'^api/token-auth/?$', obtain_jwt_token),
-    url(r'^api/auth/', include('rest_framework.urls',
-                               namespace='rest_framework')),
+    url(r'^api/auth/',
+        include('rest_framework.urls',namespace='rest_framework')),
 
-    ## API URL
-    ## App: session
-    # Session
-    url(r'^api/session-create/?$', SessionCreateAPIView.as_view()),
-
-    ## Web app URL
     ## App: dashboard
     # Index
     url(r'^$', 'index.views.index', name='index-index'),
 
-
-    # Login
+    # Account authentication and registration
+    url(r'^accounts/register/$', MyRegistrationView.as_view(),
+        name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
-    url(r'^login/$', 'index.views.organizationLogin', name='index-login'),
-    # Logout
-    url(r'^logout/$', 'index.views.organizationLogout', name='index-logout'),
 
-    # Dashboard
-    # url(r'^session/dashboard/$',
-    #     'session.views.dashboard',
-    #     name='session-dashboard'),
 
+    ################################ employees ################################
     # Add memeber
     url(r'^session/add-member/$',
         login_required(TemporalUserCreateView.as_view()),
@@ -78,10 +73,6 @@ urlpatterns = [
     url(r'^session/members/(?P<pk>[-\w]+)/$',
         login_required(TemporalUserShowView.as_view()),
         name='session-memberdetail'),
-    # List members in dashboard
-    url(r'^session/members/$',
-        login_required(CurrentPunchedInEmployees.as_view()),
-        name='session-members'),
     # Edit members profile
     url(r'^session/members/(?P<pk>[-\w]+)/edit$',
         login_required(EditEmployees.as_view()),
@@ -91,10 +82,33 @@ urlpatterns = [
         'session.views.DeleteEmployees',
         name='session-member-delete'),
 
-    # History
+
+    ############################## Sessions ###################################
+    # Session current members signed in in dashboard
+    url(r'^session/members/$',
+        login_required(CurrentPunchedInEmployees.as_view()),
+        name='session-members'),
+
+    # Session manual clock out
+    url(r'^session/clockout/$',
+        'session.views.clockOut',
+        name='session-manual-clockout'),
+
+    # Session History
     url(r'^session/history/$',
         HistorySessionView.as_view(),
-        name='session-history')
+        name='session-history'),
+
+
+    ############################# Department ##################################
+    # Add departments
+    url(r'^session/departments/create/$',
+        'session.views.addDepartment',
+        name='session-department-add'),
+    # Delete departments
+    url(r'^session/departments/(?P<pk>[-\w]+)/delete$',
+        'session.views.deleteDepartment',
+        name='session-department-delete'),
 
 ]
 

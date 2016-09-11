@@ -18,7 +18,7 @@
     </ul>
 </div>
 {% endif %}
-
+<br><br>
 <div class="container-fluid" id="signedin">
     <div class="row">
         <div class="col-md-offset-1 col-md-4 emp-list">
@@ -65,7 +65,13 @@
                     <td>{{ session.temporal_user.first_name }} {{ session.temporal_user.last_name }}</td>
                     <td>{{ session.temporal_user.team }}</td>
                     <td>{{ session.login_time }}</td>
-                    <td><a href=#>x</a></td>
+                    <td>
+                        <form action="{% url "session-manual-clockout" %}" method="post">{% csrf_token %}
+                            <input type="hidden" name="qr_code_string" value="{{ session.temporal_user.qr_code_string }}">
+                            <input type="hidden" name="time_now" value="" class="time-now">
+                            <input type="submit" name="submit" value="Log out" class="btn btn-custom logout">
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
