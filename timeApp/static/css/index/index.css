@@ -202,6 +202,18 @@ p.fourth-section {
     font-size: 18.5px;
 }
 
+.about-qr {
+    border: 2px solid;
+    border-radius: 150px;
+    padding: 30px 35px 25px 35px;
+}
+
+.about-desktop {
+    border: 2px solid;
+    border-radius: 110px;
+    padding: 30px 25px 20px 25px;
+}
+
 /****************sixth-section*****************/
 div.sixth-section {
     margin-top: 50px;

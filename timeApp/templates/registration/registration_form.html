@@ -4,11 +4,35 @@
 {% block title %}{% trans "Register for an account" %}{% endblock %}
 
 {% block content %}
-<form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="{% trans 'Submit' %}" />
-</form>
+
+<div class="container background-image">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4 col-xs-offset-2 col-xs-8 registration-form">
+            <h1 class="text-center">Sign up for Klokln</h1>
+            <form method="post" action="{% url "registration_register" %}">{% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" class="form-control" id="id_username" placeholder="Username" name="username" maxlength=30 required>
+                </div>
+                <div class="form-group">
+                    <label for="id_email">Email address</label>
+                    <input type="email" class="form-control" id="id_email" placeholder="Email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="id_password1" placeholder="Password" name="password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_password2">Password confirmation</label>
+                    <input type="password" class="form-control" id="id_password2" placeholder="Password" name="password2" required>
+                </div>
+                <!-- <button type="submit" class="btn btn-success btn-block">Sign up for KlokIn</button> -->
+                <input type="submit" class="btn btn-success btn-block" value="{% trans 'Sign up for KlokIn' %}" />
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 

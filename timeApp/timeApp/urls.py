@@ -57,6 +57,16 @@ urlpatterns = [
     ## App: dashboard
     # Index
     url(r'^$', 'index.views.index', name='index-index'),
+    # About
+    url(r'^about/$', 'index.views.about', name='index-about'),
+    # Features
+    url(r'^#features$', 'index.views.index', name='index-features'),
+    # How it works
+    url(r'^#how-it-works$', 'index.views.index', name='index-how-it-works'),
+    # Contact
+    url(r'^#contact$', 'index.views.index', name='index-contact'),
+    # FAQ
+    url(r'^faq/$', 'index.views.faq', name='index-faq'),
 
     # Account authentication and registration
     url(r'^accounts/register/$', MyRegistrationView.as_view(),

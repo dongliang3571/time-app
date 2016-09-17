@@ -1,5 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
 
+body {
+    background-color: #F2F2F3;
+    font-family: 'Avenir','Helvetica Neue',Arial,sans-serif;
+}
+
 ul.messages {
     list-style-type: none;
     text-align: center;
@@ -15,4 +20,18 @@ ul.messages {
 
 .navbar {
     margin-bottom: 0;
+}
+
+.background-image {
+    background: url("/static/images/background_dashboard_index.jpg") center center / auto 100%;
+    width: 100%;
+    min-height: 1000px;
+    background-size: cover;
+}
+
+.registration-form {
+    margin-top: 4%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-bottom: 4%;
+    border-radius: 20px;
 }
