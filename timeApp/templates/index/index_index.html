@@ -7,6 +7,8 @@
 
 {% block content %}
 
+{% include "index/_navigation_bar.html" %}
+
 {% if messages %}
 <div id="message" class="row" data-dismiss="alert">
     <ul class="messages alert alert-success col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4">
@@ -17,35 +19,169 @@
 </div>
 {% endif %}
 
-
-<div class="container contentContainer" id="topContainer">
+<div class="container-fluid landing-title top-background-image">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="center" id="signin">
-                <h3>Sign in</h3>
-                <form method="post" action="">{% csrf_token %}
-                    <div class="col-md-4 col-md-offset-4">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                            {{ form.email }}
-                            {{ form.email.errors }}
-                        </div>
+        <div class="main-wrapper">
+            <div class="col-md-offset-1 col-md-6 col-sm-offset-1 col-sm-6 col-xs-offset-1 col-xs-10">
+                <h1 class="head-line">KlokIn</h1>
+                <h2 class="main-title">The most efficient way of tracking your employees attendance.</h2>
+                <a class="signup btn">Watch video</a>
+                <a class="signup btn">Get the app</a>
+            </div>
 
-                        </br>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-                            {{ form.password }}
-                            {{ form.password.errors }}
-                        </div>
-
-                        </br>
-                        <button type="submit" class="btn new-btn">Sign in</button>
+            <div class="col-md-3 col-sm-3 col-xs-offset-1 col-xs-10 signform-wrapper">
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
                     </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Confirm Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Sign up for KlokIn</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<div class="container-fluid third-section">
+    <div class="row">
+        <div class="col-md-offset-1 col-md-5 col-sm-offset-1 col-sm-5">
+            <p>
+                We make it easy for you to track your employees attendance.
+                Using QR codes, pir fast scanning technology and an admin panel
+                tailored for your managers, you will be able to track employees
+                hours on the cloud and on the go.
+            </p>
+        </div>
+        <img class="ipad" src="{% static "images/ipad.png" %}">
+    </div>
+</div>
+
+<!-- section of About -->
+<div class="container fourth-section">
+    <div class="row text-center">
+
+            <h1>ABOUT</h1>
+            <div class="row">
+                <div class="col-md-offset-1 col-md-5">
+                    <img src="http://placehold.it/350x150">
+                    <p class="about-below-text">
+                        QR codes serve the purpose of a bar code. Each employee
+                        will use their sepecific QR codes to punch in and out.
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <img src="http://placehold.it/350x150">
+                    <p class="about-below-text">
+                        The admin panel is web based. This gives you access
+                        whether you are on desktop or on mobile. On your Panel
+                        you will be able to track attendance for every single
+                        employee.
+                    </p>
+                </div>
+            </div>
+
+    </div>
+</div>
+
+<!-- section of features -->
+<div class="container sixth-section">
+    <div class="row text-center">
+        <h1>AMAZING FEATURES</h1>
+        <p class="lead">
+            In three easy steps, schedule a mechanic. Saves you time, money,
+            and energy!
+        </p>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-offset-1 col-md-3 col-sm-offset-1 col-sm-3">
+            <div class="left-upper">
+                <div>
+                    <i class="fa fa-clock-o fa-4x"></i>
+                </div>
+                <h3>Time</h3>
+                <p class="fadeInBlock">
+                    Kanic is convenience. We believe you should not waste your
+                    time at a repair shop.
+                    <br>
+                    <br>
+                </p>
+            </div>
+            <div class="left-lower">
+                <div>
+                    <i class="fa fa-credit-card fa-4x"></i>
+                </div>
+                <h3>Transparency</h3>
+                <p>
+                    Using our Get a Quote tool. You will be able to know in advance
+                    how much you will be paying. Also, you only get charged after
+                    the service is completed.
+                </p>
+            </div>
+        </div>
+
+
+        <img class="col-md-4 col-sm-4" src="{% static "images/ipad.png" %}">
+
+
+        <div class="col-md-3 col-sm-3">
+            <div class="right-upper">
+                <div>
+                    <i class="fa fa-lock fa-4x"></i>
+                </div>
+                <h3>Safety</h3>
+                <p>
+                    All of our mechanics are background checked. By using leading
+                    technology we are able to run rapid and effective background
+                    checks on our mechanics.
+                </p>
+            </div>
+            <div class="right-lower">
+                <div>
+                    <i class="fa fa-star fa-4x"></i>
+                </div>
+                <h3>Reliability</h3>
+                <p>
+                    We only accept certified mechanics to be part of our team. Also,
+                    with our review system, we make sure to provide you with the
+                    best rated mechanics.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="container how-it-work">
+    <iframe class="col-md-offset-1 col-md-10 col-sm-offset-1 col-sm-10 col-xs-12 youtube" src="https://www.youtube.com/embed/KPt2BRe5Lzg" frameborder="0" allowfullscreen></iframe>
+</div>
+<br>
+
+<!-- Download and newsletter -->
+<div class="container">
+    <div class="col-md-offset-1 col-md-5">
+        <h3>DOWNLOAD THE APP</h3>
+        <img src="http://placehold.it/350x150">
+    </div>
+    <div class="col-md-5">
+        <h3>SIGN UP TO OUR NEWSLETTER</h3>
+        <img src="http://placehold.it/350x150">
+    </div>
+</div>
+<br>
+
+<!-- section of footer -->
+{% include "_footer.html" %}
+
+
 {% endblock %}
 
 {% block bottom_js %}

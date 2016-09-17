@@ -1,0 +1,71 @@
+<!-- footer -->
+
+<div class="container-fluid eighth-section">
+    <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 col-md-offset-1 col-md-2 menu">
+            <h3>Overview</h3>
+            <ul>
+                <li>
+                    <a href="#about">Features</a>
+                </li>
+                <li>
+                    <a href="#about">Services</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-2 col-md-2 menu">
+            <h3>Menu</h3>
+            <ul>
+                <li>
+                    <a href="#about">About us</a>
+                </li>
+                <li>
+                    <a href="mailto:Kanic@zahncenternyc.com">Contact us(Kanic@zahncenternyc.com)</a>
+                </li>
+                <li>
+                    <a href="#" class="hiring" data-toggle="modal" data-target="#hiringModal">
+                        We're hiring!
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-2 col-md-2 menu">
+            <h3>Social</h3>
+            <ul>
+                <li>
+                    <a href="https://www.facebook.com/Kanic-553041674892315">Facebook</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-5 col-md-4 newsletter">
+            <div class="signup clearfix">
+                <p>
+                    Sign up for the newsletter and we'll inform you of updates, offers and more.
+                </p>
+                <form id="newsletterform" action="" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default newsletter" type="submit">Sign up</button>
+                        </span>
+
+                    </div>
+                </form>
+            </div>
+            <div class="social">
+                <a class="social" href="https://www.facebook.com/Kanic-553041674892315"><i class="social fa fa-facebook-square fa-3x" aria-hidden="true"></i></a>
+                <a class="social" href="https://www.facebook.com/Kanic-553041674892315"><i class="social fa fa-twitter-square fa-3x" aria-hidden="true"></i></a>
+                <a class="social" href="https://www.facebook.com/Kanic-553041674892315"><i class="social fa fa-instagram fa-3x" aria-hidden="true"></i></a>
+                <a class="social" href="mailto:Kanic@zahncenternyc.com"><i class="social fa fa-envelope-square fa-3x" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center credits">
+        <div class="col-md-12">
+            Copyright © 2016. Kanic
+        </div>
+    </div>
+</div>

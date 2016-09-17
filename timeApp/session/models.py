@@ -59,7 +59,10 @@ class TemporalUser(models.Model):
                               unique=True)
     organization = models.ForeignKey(User, null=True, blank=True)
     department= models.ForeignKey(Department, null=True, blank=True)
-    wage = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2)
+    wage = models.DecimalField(null=True,
+                               blank=True,
+                               max_digits=7,
+                               decimal_places=2)
     qr_code_string = models.CharField(max_length=300, null=True, blank=True)
     pin_number = models.CharField(max_length=4, null=True, blank=True)
     is_visitor = models.BooleanField(default=False)
@@ -155,7 +158,10 @@ class UserSession(models.Model):
     is_active = models.BooleanField(verbose_name='check if session is active',
                                     default=False)
     total_minutes = models.IntegerField(default=0, null=True, blank=True)
-    total_salary = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
+    total_salary = models.DecimalField(null=True,
+                                       blank=True,
+                                       max_digits=10,
+                                       decimal_places=2)
     createAt = models.DateTimeField(verbose_name='date created',
                                     default=timezone.now)
 
@@ -213,7 +219,9 @@ class UserSession(models.Model):
         return self.logout_time.strftime(format)
 
     def calculate_total_salary(self):
-        self.total_salary = self.temporal_user.wage * self.total_time_in_hours_float()
+        self.total_salary = (
+            self.temporal_user.wage * self.total_time_in_hours_float()
+        )
         self.save()
         return self.total_salary
 
