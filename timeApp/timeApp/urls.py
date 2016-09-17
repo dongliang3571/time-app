@@ -69,6 +69,7 @@ urlpatterns = [
     url(r'^faq/$', 'index.views.faq', name='index-faq'),
     # Newsletter
     url(r'^newsletter/$', 'index.views.newsletter', name='index-newsletter'),
+    url(r'^#newsletter$', 'index.views.index', name='index-newsletter-id'),
 
     # Account authentication and registration
     # url(r'^accounts/register/$', MyRegistrationView.as_view(),

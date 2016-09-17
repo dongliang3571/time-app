@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 
 from .models import ContactUs, Newsletter
-from .forms import ContactUsForm
+from .forms import ContactUsForm, NewsletterForm
 
 
 def index(request):
@@ -59,7 +59,7 @@ def newsletter(request):
         to_list = ['dongliang3571@gmail.com']
         send_mail(subject, message, from_email, to_list, fail_silently=False)
         messages.success(request, 'Thank you for subscribing')
-        return HttpResponseRedirect('/')
+        return redirect(reverse('index-index'))
     else:
         messages.error(request, 'Invalid email')
-        return HttpResponseRedirect('/#contact')
+        return redirect(reverse('index-newsletter-id'))

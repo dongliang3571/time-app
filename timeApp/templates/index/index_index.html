@@ -176,14 +176,14 @@
 <br>
 
 <!-- Download and newsletter -->
-<div class="container">
+<div id="newsletter" class="container">
     <div class="col-md-offset-1 col-md-5 text-center">
         <h3>DOWNLOAD THE APP</h3>
         <img src="{% static "images/AppStore.png" %}" class="appstore">
     </div>
     <div class="col-md-5">
         <h3>SIGN UP TO OUR NEWSLETTER</h3>
-        <form method="post" action="{% url "index-newsletter" %}">
+        <form method="post" action="{% url "index-newsletter" %}">{% csrf_token %}
             <div class="form-group">
                 <input type="text" class="form-control newsletter-input" placeholder="Email" name="email" maxlength=40 required>
             </div>

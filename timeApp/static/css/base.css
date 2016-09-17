@@ -42,3 +42,8 @@ ul.messages {
     padding-bottom: 3%;
     border-radius: 20px;
 }
+
+.foot-item, .foot-item:link, .foot-item:hover, .foot-item:focus, .foot-item:active {
+    color: white;
+    text-decoration: none;
+}
