@@ -52,3 +52,7 @@ h2 {
 .button {
     width: 200px;
 }
+
+#add-icon {
+    float: right;
+}

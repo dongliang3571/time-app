@@ -1,36 +1,322 @@
 html, body {
-    font-family: 'Avenir','Helvetica Neue',Arial,sans-serif;
     height: 100%;
+    font-family: "Avenir",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-.navbar-custom {
-    background-color: transparent;
-    background-image: none;
-    border: none;
-    height:90px;
+.fa {
+    color: #1cb796
 }
 
-#topContainer {
-    background:url("/static/images/background_dashboard_index.jpg") center center / auto 100%;
-    height: 100%;
+
+@media (max-width: 669px) {
+    .top-background-image {
+        height: 1000px;
+        min-height: 700px;
+    }
+
+}
+
+@media (min-width: 950px) {
+    .top-background-image {
+        min-height: 700px;
+    }
+
+}
+
+.top-background-image {
+    background: url("/static/images/background_dashboard_index.jpg") center center / auto 100%;
     width: 100%;
+    height: 100%;
     background-size: cover;
 }
 
-#signin {
-    border-top: 2px solid #1CB796;
-    background-color: rgba(255, 255, 255, 0.6);
-    height:220px;
-    width:auto;
+/******************navigation*****************/
+div.navbar {
+    -webkit-transition:background-color .3s ease-in;
+    transition:background-color .3s ease-in;
 }
 
-.center {
-    text-align:center;
+.navbar-default {
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: none;
 }
 
-.new-btn{
-    background-color:#23B099;
-    color:white;
-    border-radius: 0px;
-    box-shadow: 0px;
+div.navbar-transparent {
+    background-color: transparent;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: white;
+    background-color: transparent;
+}
+
+.navbar-default .navbar-toggle:hover {
+    background-color: #1cb796;
+}
+
+.navbar-default .navbar-toggle:focus {
+    background-color: transparent;
+    outline: none;
+}
+
+.navbar-default .navbar-toggle:active {
+    background-color: transparent;
+    outline: none;
+}
+
+.navbar-nav > li > a, .navbar-nav > li > a:focus {
+    font-size: 20px;
+    padding-top: 28px;
+    color: #1cb796;
+    outline: none;
+}
+
+.navbar-brand {
+    padding-top: 25px;
+    font-size: 30px;
+    height: 80px;
+    font-weight: 900;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+#hiringModal > div.modal-dialog {
+
+}
+
+#hiring-jumbo {
+    background-color: white;
+}
+
+#hiring-jumbo > form > div > input {
+    display: inline-flex;
+}
+/**************landing title section*************/
+.landing-section {
+    position: relative;
+    top: 2%;
+    -webkit-transition: top 2s;
+    transition: top 2s;
+}
+
+.head-line {
+    color: white;
+    font-weight: 900;
+    font-size: 4em;
+}
+
+.main-part {
+    margin-left: 3%;
+}
+
+.main-line, .main-title {
+    color: rgba(255, 255, 255, 0);
+    -webkit-transition: color 2s ease-out;
+    transition: color 2s ease-out;
+}
+
+.main-wrapper {
+    margin-top: 20%;
+}
+
+.signform-wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 10px 10px 10px 10px;
+}
+
+a.signup, a.signup:focus,a.signup:link {
+    text-align: center;
+    color: rgba(255, 255, 255, 1);
+    background-color: transparent;
+    -webkit-transition: color 2s ease-out;
+    transition: color 2s ease-out;
+    -webkit-transition: background-color 2s ease-out;
+    transition: background-color 2s ease-out;
+    border-width:medium;
+    border-radius: 25px;
+    border-color: white;
+    font-size: 1.5em;
+    outline: none;
+}
+
+button.cancel, button.cancel:hover, button.cancel:focus, button.cancel:active {
+    color: #333;
+    background-color: white;
+    border-color: #ccc;
+    outline: none;
+}
+
+ul.errorlist > li {
+    color: red;
+}
+
+/***************third-section**************/
+div.third-section {
+    background-color: #1CB796;
+}
+
+.ipad {
+    width: 30%;
+}
+
+.about-below-text {
+    padding-top: 20px;
+}
+
+/***************fourth-section*****************/
+div.fourth-section {
+    margin-top: 50px;
+}
+/*
+@media (min-width: 950px) {
+    div.left {
+        -webkit-transform: translateY(-100px);
+        transform: translateY(-100px);
+        -webkit-transition: transform 2s ease-out;
+        transition: transform 2s ease-out;
+    }
+
+    div.middle {
+        -webkit-transform: translateY(-40px);
+        transform: translateY(-40px);
+        -webkit-transition: transform 2s ease-out;
+        transition: transform 2s ease-out;
+    }
+
+    div.right {
+        -webkit-transform: translateY(-100px);
+        transform: translateY(-100px);
+        -webkit-transition: transform 2s ease-out;
+        transition: transform 2s ease-out;
+    }
+}
+*/
+
+p.fourth-section {
+    font-size: 18.5px;
+}
+
+/****************sixth-section*****************/
+div.sixth-section {
+    margin-top: 50px;
+}
+
+div.left-upper, div.left-lower, div.right-upper, div.right-lower {
+    margin-bottom: 50px;
+}
+
+@media (max-width: 950px) {
+    .youtube {
+        height: 400px;
+    }
+}
+
+@media (max-width: 450px) {
+    .youtube {
+        height: 200px;
+    }
+}
+
+@media (min-width: 951px) {
+    .youtube {
+        height: 600px;
+    }
+}
+
+/*
+@media (min-width: 950px) {
+    div.left-upper, div.left-lower {
+        -webkit-transform: translateX(-25%);
+        transform: translateX(-25%);
+        -webkit-transition: transform 2s ease-out;
+        transition: transform 2s ease-out;
+    }
+
+    div.right-upper, div.right-lower {
+        -webkit-transform: translateX(25%);
+        transform: translateX(25%);
+        -webkit-transition: transform 2s ease-out;
+        transition: transform 2s ease-out;
+    }
+}
+*/
+
+
+
+/****************eighth-section*****************/
+div.eighth-section {
+    padding-top: 4%;
+    padding-bottom: 30px;
+    background-color: #36454F;
+}
+
+div.credits {
+    padding-top: 60px;
+    color: #A1AAB6;
+}
+
+.eighth-section > div > div > ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.eighth-section > div > div > ul > li > a {
+    color: white;
+}
+
+div.menu {
+    line-height: 2.42857143;
+}
+.menu > h3 {
+    margin-top: 0;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.menu > ul > li > a {
+    color: #89A1C0;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+div.clearfix > form {
+    float: left;
+    width: 90%;
+    position: relative;
+}
+
+input.email {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 1px inset;
+    font-size: 13px;
+}
+
+div.newsletter {
+    position: relative;
+}
+
+div.newsletter > div > p {
+    color: white;
+}
+
+div.social {
+    float: right;
+    position: relative;
+    top: 30px;
+    right: 50px;
 }

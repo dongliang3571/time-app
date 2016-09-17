@@ -10,6 +10,16 @@ $(document).ready(function() {
         }
     });
 
+    $('#delete-department').on('click', function() {
+        var resp = confirm('Are you sure you want to delete this department?');
+        if (resp == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
+
     $('.logout').on('click', function() {
         var resp = confirm('Are you sure you want to log out this employee?');
         if (resp == true) {
@@ -30,8 +40,9 @@ $(document).ready(function() {
         }
     });
 
-    $('#add-department').on('click', function() {
-        $(this).before('<input type="text" name="department" value="">');
+    $('#add-icon').on('click', function(event) {
+        event.preventDefault();
+        $(this).before('<div class="form-group"><input type="text" class="form-control" name="department"></div>');
     });
 
 });
