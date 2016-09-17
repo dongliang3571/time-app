@@ -1,11 +1,16 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
 
+body {
+    background-color: #F2F2F3;
+    font-family: 'Avenir','Helvetica Neue',Arial,sans-serif;
+}
+
 ul.messages {
     list-style-type: none;
     text-align: center;
-    z-index: 100;
+    z-index: 1000;
     position: fixed;
-    top: 0px;
+    top: 100px;
 }
 
 .btn-custom {
@@ -15,4 +20,25 @@ ul.messages {
 
 .navbar {
     margin-bottom: 0;
+}
+
+.background-image {
+    background: url("/static/images/background_dashboard_index.jpg") center center / auto 100%;
+    width: 100%;
+    min-height: 1000px;
+    background-size: cover;
+}
+
+.registration-form {
+    margin-top: 16%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-bottom: 3%;
+    border-radius: 20px;
+}
+
+.contact-form {
+    margin-top: 16%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-bottom: 3%;
+    border-radius: 20px;
 }
