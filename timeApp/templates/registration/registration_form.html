@@ -1,13 +1,20 @@
 {% extends "registration/registration_base.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %}{% trans "Register for an account" %}{% endblock %}
 
 {% block content %}
 
+{% block top_css %}
+<link href="{% static "css/index/index.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% include "index/_navigation_bar.html" %}
+
 <div class="container background-image">
     <div class="row">
-        <div class="col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4 col-xs-offset-2 col-xs-8 registration-form">
+        <div class="col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4 col-xs-offset-1 col-xs-10 registration-form">
             <h1 class="text-center">Sign up for Klokln</h1>
             <form method="post" action="{% url "registration_register" %}">{% csrf_token %}
                 <div class="form-group">
@@ -26,12 +33,19 @@
                     <label for="id_password2">Password confirmation</label>
                     <input type="password" class="form-control" id="id_password2" placeholder="Password" name="password2" required>
                 </div>
-                <!-- <button type="submit" class="btn btn-success btn-block">Sign up for KlokIn</button> -->
                 <input type="submit" class="btn btn-success btn-block" value="{% trans 'Sign up for KlokIn' %}" />
             </form>
         </div>
     </div>
 </div>
+
+<!-- section of footer -->
+{% include "_footer.html" %}
+
+
+{% block bottom_js %}
+<script type="text/javascript "src="{% static "javascript/index/index.js" %}"></script>
+{% endblock %}
 
 {% endblock %}
 

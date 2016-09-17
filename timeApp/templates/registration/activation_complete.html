@@ -7,7 +7,9 @@
 <p>
     {% trans "Your account is now activated." %}
     {% if not user.is_authenticated %}
-    {% trans "You can log in." %}
+    {% trans "You can " %}<a href="{% url "auth_login" %}">sign in</a>
+    {% else %}
+    {% trans "You can go to " %}<a class="btn btn-custom" href="{% url "session-members" %}">admin panel</a>
     {% endif %}
 </p>
 {% endblock %}

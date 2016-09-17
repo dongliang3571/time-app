@@ -64,13 +64,15 @@ urlpatterns = [
     # How it works
     url(r'^#how-it-works$', 'index.views.index', name='index-how-it-works'),
     # Contact
-    url(r'^#contact$', 'index.views.index', name='index-contact'),
+    url(r'^contact/$', 'index.views.contact', name='index-contact'),
     # FAQ
     url(r'^faq/$', 'index.views.faq', name='index-faq'),
+    # Newsletter
+    url(r'^newsletter/$', 'index.views.newsletter', name='index-newsletter'),
 
     # Account authentication and registration
-    url(r'^accounts/register/$', MyRegistrationView.as_view(),
-        name='registration_register'),
+    # url(r'^accounts/register/$', MyRegistrationView.as_view(),
+    #     name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
 
@@ -98,12 +100,10 @@ urlpatterns = [
     url(r'^session/members/$',
         login_required(CurrentPunchedInEmployees.as_view()),
         name='session-members'),
-
     # Session manual clock out
     url(r'^session/clockout/$',
         'session.views.clockOut',
         name='session-manual-clockout'),
-
     # Session History
     url(r'^session/history/$',
         HistorySessionView.as_view(),

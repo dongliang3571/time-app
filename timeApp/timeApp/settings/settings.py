@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'rest_framework',
     'registration',
+    'index',
     'session',
 )
 
@@ -87,27 +88,27 @@ WSGI_APPLICATION = 'timeApp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd79crh2arvusna',
-        'USER': 'zsbrmnrygmvbzz',
-        'PASSWORD': '9WMp4WeBCimiI9lyPHfJdKEgOD',
-        'HOST': 'ec2-23-21-234-201.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'time_app',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '',
+#         'NAME': 'd79crh2arvusna',
+#         'USER': 'zsbrmnrygmvbzz',
+#         'PASSWORD': '9WMp4WeBCimiI9lyPHfJdKEgOD',
+#         'HOST': 'ec2-23-21-234-201.compute-1.amazonaws.com',
+#         'PORT': '5432',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'time_app',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

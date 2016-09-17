@@ -18,7 +18,6 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
     <!-- customer css and js for base html -->
-    <script src="{% static "javascript/base.js" %}"></script>
     <link rel="stylesheet" href="{% static "css/base.css" %}" type="text/css">
 
     {% block top_css %}{% endblock %}
@@ -40,6 +39,7 @@
 </script>
 
 {% block bottom_js %}{% endblock %}
+<script src="{% static "javascript/base.js" %}"></script>
 </body>
 
 </html>

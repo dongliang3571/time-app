@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block top_css %}
+<link href="{% static "css/index/index.css" %}" rel="stylesheet" type="text/css">
+<link href="{% static "css/index/contact.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+{% include "index/_navigation_bar.html" %}
+
+{% if messages %}
+<div id="message" class="row" data-dismiss="alert">
+    <ul class="messages alert alert-success col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }} <a id="close" class="close">X</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="container background-image">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4 col-xs-offset-1 col-xs-10 contact-form">
+            <h1 class="text-center">Contact Klokln</h1>
+            <form method="post" action="{% url "index-contact" %}">{% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Your name</label>
+                    <input type="text" class="form-control" id="id_username" placeholder="Your name" name="name" maxlength=30 required>
+                </div>
+                <div class="form-group">
+                    <label for="id_companyname">Company name</label>
+                    <input type="text" class="form-control" id="id_companyname" placeholder="Company name" name="company_name" maxlength=30 required>
+                </div>
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    <input type="email" class="form-control" id="id_email" placeholder="Email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_subject">Subject</label>
+                    <input type="text" class="form-control" id="id_subject" placeholder="Subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_message">Message</label>
+                    <textarea rows="4" cols="50" class="form-control" id="id_message" placeholder="Message" name="message" required></textarea>
+                </div>
+                <!-- <button type="submit" class="btn btn-success btn-block">Sign up for KlokIn</button> -->
+                <input type="submit" class="btn btn-success btn-block" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- section of footer -->
+{% include "_footer.html" %}
+
+
+{% endblock %}
+
+{% block bottom_js %}
+<script type="text/javascript "src="{% static "javascript/index/index.js" %}"></script>
+{% endblock %}

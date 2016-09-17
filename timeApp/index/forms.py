@@ -1,23 +1,19 @@
 from django import forms
-from django.contrib.auth.models import User
+from .models import ContactUs, Newsletter
+
+class ContactUsForm(forms.ModelForm):
+    class Meta:
+        model = ContactUs
+        fields = ['name', 'company_name', 'email', 'subject', 'message']
 
 
-class SignInForm(forms.Form):
-    error_css_class = 'error'
-    required_css_class = 'required'
-
+class NewsletterForm(forms.ModelForm):
     email = forms.EmailField(
-        label='Email',
-        max_length=100,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Email address',
-            'class': 'form-control'
-            })
-        )
-    password = forms.CharField(
-        label='Password',
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Password',
-            'class': 'form-control'
-            })
-        )
+            'class': 'form-control',
+            'placeholder': 'Email'})
+    )
+
+    class Meta:
+        model = Newsletter
+        fields = ['email']

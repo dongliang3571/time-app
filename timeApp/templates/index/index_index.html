@@ -22,7 +22,7 @@
 <div class="container-fluid landing-title top-background-image">
     <div class="row">
         <div class="main-wrapper">
-            <div class="col-md-offset-1 col-md-6 col-sm-offset-1 col-sm-6 col-xs-offset-1 col-xs-10">
+            <div class="col-md-offset-1 col-md-6 col-sm-offset-1 col-sm-5 col-xs-offset-1 col-xs-10">
                 <h1 class="head-line">KlokIn</h1>
                 <h2 class="main-title">The most efficient way of tracking your employees attendance.</h2>
                 <a class="signup btn">Watch video</a>
@@ -32,7 +32,7 @@
                 <br>
             </div>
 
-            <div class="col-md-3 col-sm-3 col-xs-offset-1 col-xs-10 signform-wrapper">
+            <div class="col-md-3 col-sm-4 col-xs-offset-1 col-xs-10 signform-wrapper">
                 <form method="post" action="{% url "registration_register" %}">{% csrf_token %}
                     <div class="form-group">
                         <label for="id_username">Username</label>
@@ -57,7 +57,7 @@
     </div>
 </div>
 
-<div class="container-fluid third-section">
+<!-- <div class="container-fluid third-section">
     <div class="row">
         <div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6">
             <p>
@@ -68,13 +68,21 @@
             </p>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- section of About -->
 <div class="container fourth-section">
     <div class="row text-center">
 
             <h1>ABOUT</h1>
+            <div class="col-md-offset-3 col-md-6">
+                <p>
+                    We make it easy for you to track your employees attendance.
+                    Using QR codes, pir fast scanning technology and an admin panel
+                    tailored for your managers, you will be able to track employees
+                    hours on the cloud and on the go.
+                </p>
+            </div>
             <div class="row">
                 <div class="col-md-offset-1 col-md-4">
                     <i class="fa fa-qrcode fa-5x about-qr" aria-hidden="true"></i>
@@ -169,13 +177,18 @@
 
 <!-- Download and newsletter -->
 <div class="container">
-    <div class="col-md-offset-1 col-md-5">
+    <div class="col-md-offset-1 col-md-5 text-center">
         <h3>DOWNLOAD THE APP</h3>
-        <img src="http://placehold.it/350x150">
+        <img src="{% static "images/AppStore.png" %}" class="appstore">
     </div>
     <div class="col-md-5">
         <h3>SIGN UP TO OUR NEWSLETTER</h3>
-        <img src="http://placehold.it/350x150">
+        <form method="post" action="{% url "index-newsletter" %}">
+            <div class="form-group">
+                <input type="text" class="form-control newsletter-input" placeholder="Email" name="email" maxlength=40 required>
+            </div>
+            <input class="btn btn-custom" type="submit" value="Submit">
+        </form>
     </div>
 </div>
 <br>
