@@ -86,17 +86,6 @@ div.navbar-transparent {
     color: white;
 }
 
-#hiringModal > div.modal-dialog {
-
-}
-
-#hiring-jumbo {
-    background-color: white;
-}
-
-#hiring-jumbo > form > div > input {
-    display: inline-flex;
-}
 /**************landing title section*************/
 .landing-section {
     position: relative;
@@ -157,20 +146,16 @@ ul.errorlist > li {
     color: red;
 }
 
-/***************third-section**************/
+/***************third-section(About)**************/
 div.third-section {
     background-color: #1CB796;
-}
-
-.ipad {
-    width: 30%;
 }
 
 .about-below-text {
     padding-top: 20px;
 }
 
-/***************fourth-section*****************/
+/***************fourth-section(Features)*****************/
 div.fourth-section {
     margin-top: 50px;
 }
@@ -218,6 +203,8 @@ p.fourth-section {
 /****************sixth-section*****************/
 div.sixth-section {
     margin-top: 50px;
+    background-color: rgb(200, 200, 200);
+    padding-bottom: 30px;
 }
 
 div.left-upper, div.left-lower, div.right-upper, div.right-lower {

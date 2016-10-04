@@ -36,10 +36,11 @@ class SessionCreateAPIView(APIView):
     # authentication_classes = (SessionAuthentication, JSONWebTokenAuthentication)
     # permission_classes = (IsAuthenticated,)
 
-    def get(self, request, format=None):
+    def post(self, request, format=None):
         # grab the QRcode string from post request body
-        qr_code_string = request.GET.get('qr_code_string', '')
-        time_string = request.GET.get('time_now', '')
+        qr_code_string = request.POST.get('qr_code_string', '')
+        time_string = request.POST.get('time_now', '')
+        print(time_string)
         format = '%Y-%m-%d %H:%M:%S'
         try:
             time_now = datetime.strptime(time_string, format)
@@ -154,12 +155,19 @@ class EditEmployees(View):
         editForm = TemporalUserCreateForm(instance=employee)
         context['employee'] = employee
         context['editForm'] = editForm
+        editForm.fields['department'].queryset = (
+            Department.objects.filter(organization=request.user)
+        )
+        editForm.fields['department'].initial = employee.department
         context['qr_code_string'] = employee.qr_code_string
         return render(request, template_name, context)
 
     def post(self, request, pk):
         employee = get_object_or_404(TemporalUser, pk=pk)
         editForm = TemporalUserCreateForm(request.POST, instance=employee)
+        editForm.fields['department'].queryset = (
+            Department.objects.filter(organization=request.user)
+        )
         context = {}
         if editForm.is_valid():
             editForm.save()

@@ -10,11 +10,13 @@
 {% include "navBar.html" %}
 
 {% if messages %}
-<ul class="messages alert alert-success">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+<div id="message" class="row" data-dismiss="alert">
+    <ul class="messages alert alert-success col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }} <a id="close" class="close">X</a></li>
+        {% endfor %}
+    </ul>
+</div>
 {% endif %}
 
 <div class="container">
